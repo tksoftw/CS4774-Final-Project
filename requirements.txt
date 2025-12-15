@@ -20,3 +20,7 @@ pydantic-settings==2.7.0
 # Utilities
 python-dotenv==1.0.1
 
+# Scraping
+beautifulsoup4>=4.12.0
+requests>=2.31.0
+lxml>=5.0.0
