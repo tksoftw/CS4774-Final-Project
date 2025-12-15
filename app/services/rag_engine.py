@@ -1,0 +1,137 @@
+"""RAG (Retrieval-Augmented Generation) engine."""
+
+from typing import Optional
+from app.services.gemini_service import GeminiService
+from app.data.vector_store import VectorStore
+
+
+class RAGEngine:
+    """RAG engine for course-aware AI responses."""
+    
+    SYSTEM_PROMPT = """You are an AI academic advisor for University of Virginia (UVA) students. 
+Your role is to help students with course planning, scheduling, and academic advice.
+
+Guidelines:
+- Be helpful, accurate, and friendly
+- Use the provided course information to give specific, grounded answers
+- If you don't have enough information to answer a question, say so
+- Focus on UVA-specific information when available
+- Help students understand prerequisites, course content, and scheduling
+- Suggest courses based on student interests and requirements
+- Do not use emojis, bold, or italic text in your responses.
+
+When discussing courses, include relevant details like:
+- Course title and number
+- Credits
+- Meeting times and days (if available)
+- Instructor (if available)
+- Prerequisites (if relevant)
+"""
+
+    QUERY_PROMPT_TEMPLATE = """Use the following course information to answer the student's question.
+
+RELEVANT COURSE INFORMATION:
+{context}
+
+STUDENT QUESTION:
+{question}
+
+Provide a helpful, accurate response based on the course information above. If the information provided doesn't fully answer the question, acknowledge what you know and what you don't.
+"""
+
+    def __init__(self):
+        self.gemini_service = GeminiService()
+        self.vector_store = VectorStore()
+        self.conversation_history: dict[str, list[dict]] = {}
+    
+    def query(
+        self,
+        question: str,
+        conversation_id: Optional[str] = None,
+        n_results: int = 10,  # Increased from 5 to 10 for better recall
+    ) -> dict:
+        """Process a user query with RAG.
+        
+        Args:
+            question: User's question
+            conversation_id: Optional ID for conversation context
+            n_results: Number of documents to retrieve
+            
+        Returns:
+            Dictionary with response and sources
+        """
+        # Retrieve relevant documents
+        search_results = self.vector_store.search(query=question, n_results=n_results)
+        
+        # Format context from retrieved documents
+        context_parts = []
+        sources = []
+        
+        for i, doc in enumerate(search_results["documents"]):
+            if doc:
+                context_parts.append(f"[Source {i+1}]\n{doc}")
+                
+                # Extract source info from metadata
+                metadata = search_results["metadatas"][i] if search_results["metadatas"] else {}
+                if metadata:
+                    source_str = f"{metadata.get('subject', '')} {metadata.get('catalog_number', '')} - {metadata.get('title', '')}"
+                    sources.append(source_str)
+        
+        context = "\n\n".join(context_parts) if context_parts else "No specific course information found."
+        
+        # Build the prompt
+        user_prompt = self.QUERY_PROMPT_TEMPLATE.format(
+            context=context,
+            question=question,
+        )
+        
+        # Get response from Gemini
+        response = self.gemini_service.get_completion(
+            prompt=user_prompt,
+            system_prompt=self.SYSTEM_PROMPT,
+            temperature=0.7,
+            max_tokens=1000,
+        )
+        
+        return {
+            "response": response,
+            "sources": sources,
+            "context_used": len(context_parts),
+        }
+    
+    def simple_query(self, question: str) -> str:
+        """Simple query without RAG (for general questions).
+        
+        Args:
+            question: User's question
+            
+        Returns:
+            Response string
+        """
+        return self.gemini_service.get_completion(
+            prompt=question,
+            system_prompt=self.SYSTEM_PROMPT,
+            temperature=0.7,
+            max_tokens=1000,
+        )
+    
+    def is_course_related(self, question: str) -> bool:
+        """Determine if a question is course-related.
+        
+        Args:
+            question: User's question
+            
+        Returns:
+            True if question is about courses
+        """
+        course_keywords = [
+            "course", "class", "credit", "prerequisite", "prereq",
+            "schedule", "instructor", "professor", "section",
+            "enroll", "registration", "major", "minor", "degree",
+            "cs ", "math ", "stat ", "dsa ", "sts ",
+            "semester", "spring", "fall", "summer",
+        ]
+        
+        question_lower = question.lower()
+        return any(keyword in question_lower for keyword in course_keywords)
+

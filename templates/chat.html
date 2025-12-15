@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="chat-container card" style="padding: 0; overflow: hidden;">
+        <!-- Chat Header -->
+        <div class="card-header" style="margin: 0; padding: 1rem 1.5rem; border-radius: 12px 12px 0 0;">
+            <div class="flex items-center gap-2">
+                <span style="font-size: 1.5rem;">🤖</span>
+                <div>
+                    <h3 class="card-title">Course Assistant</h3>
+                    <p class="text-muted" style="font-size: 0.875rem;">Ask me anything about UVA courses</p>
+                </div>
+            </div>
+            <form action="/chat/clear" method="post" style="margin: 0;">
+                <input type="hidden" name="session_id" value="{{ session_id }}">
+                <button type="submit" class="btn btn-ghost btn-sm">🗑️ Clear</button>
+            </form>
+        </div>
+        
+        <!-- Chat Messages -->
+        <div class="chat-messages">
+            {% if messages %}
+                {% for msg in messages %}
+                <div class="chat-message {{ msg.role }}">
+                    <div class="chat-avatar">
+                        {% if msg.role == 'user' %}👤{% else %}🤖{% endif %}
+                    </div>
+                    <div class="chat-bubble">
+                        {{ msg.content | replace('\n', '<br>') | safe }}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="chat-empty">
+                    <div class="chat-empty-icon">🎓</div>
+                    <h3 class="chat-empty-title">How can I help you today?</h3>
+                    <p class="text-muted">Ask me about courses, prerequisites, professors, or scheduling at UVA.</p>
+                    
+                    <div class="chat-suggestions">
+                        <button type="button" class="suggestion-chip" onclick="document.querySelector('.chat-input').value = this.textContent; document.querySelector('.chat-input').focus();">What CS courses should I take?</button>
+                        <button type="button" class="suggestion-chip" onclick="document.querySelector('.chat-input').value = this.textContent; document.querySelector('.chat-input').focus();">Tell me about CS 4774</button>
+                        <button type="button" class="suggestion-chip" onclick="document.querySelector('.chat-input').value = this.textContent; document.querySelector('.chat-input').focus();">Who teaches Machine Learning?</button>
+                        <button type="button" class="suggestion-chip" onclick="document.querySelector('.chat-input').value = this.textContent; document.querySelector('.chat-input').focus();">What are the prereqs for Data Structures?</button>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Chat Input -->
+        <div class="chat-input-container">
+            <form action="/chat/send" method="post" class="chat-input-form">
+                <input type="hidden" name="session_id" value="{{ session_id }}">
+                <input 
+                    type="text" 
+                    name="message" 
+                    class="chat-input" 
+                    placeholder="Ask about courses, prerequisites, professors..."
+                    required
+                    autofocus
+                >
+                <button type="submit" class="btn btn-primary">
+                    Send →
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
