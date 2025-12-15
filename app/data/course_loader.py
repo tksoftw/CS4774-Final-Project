@@ -122,6 +122,59 @@ class CourseLoader:
         
         return all_courses
     
+    def _fetch_hooslist_descriptions(self, courses: list[dict]) -> dict:
+        """Fetch descriptions from Hooslist for unique courses.
+        
+        Args:
+            courses: List of course dictionaries
+            
+        Returns:
+            Dictionary mapping "SUBJECT_CATALOG" to description info
+        """
+        # Get unique course identifiers
+        unique_courses = {}
+        for course in courses:
+            key = f"{course.get('subject', '')}_{course.get('catalog_nbr', '')}"
+            if key not in unique_courses:
+                unique_courses[key] = {
+                    "subject": course.get("subject", ""),
+                    "catalog_nbr": course.get("catalog_nbr", ""),
+                }
+        
+        print(f"\n{'='*50}")
+        print(f"FETCHING DESCRIPTIONS FROM HOOSLIST")
+        print(f"{'='*50}")
+        print(f"Unique courses to fetch: {len(unique_courses)}")
+        print()
+        
+        descriptions = {}
+        total = len(unique_courses)
+        start_time = time.time()
+        
+        for idx, (key, info) in enumerate(unique_courses.items(), 1):
+            subject = info["subject"]
+            catalog_nbr = info["catalog_nbr"]
+            
+            if idx % 20 == 0 or idx == total:
+                elapsed = time.time() - start_time
+                rate = idx / elapsed if elapsed > 0 else 0
+                eta = (total - idx) / rate if rate > 0 else 0
+                print(f"  [{idx}/{total}] Fetching descriptions... ({elapsed:.1f}s elapsed, ETA: {eta:.0f}s)", flush=True)
+            
+            desc_info = self.sis_service.get_course_description(subject, catalog_nbr)
+            descriptions[key] = desc_info
+        
+        # Count how many had descriptions
+        with_desc = sum(1 for d in descriptions.values() if d.get("description"))
+        with_prereq = sum(1 for d in descriptions.values() if d.get("prerequisites"))
+        
+        total_time = time.time() - start_time
+        print(f"\nFetched {len(descriptions)} descriptions in {total_time:.1f}s")
+        print(f"  - With descriptions: {with_desc}")
+        print(f"  - With prerequisites: {with_prereq}")
+        
+        return descriptions
+    
     def _index_courses(self, courses: list[dict]) -> int:
         """Index courses into vector store.
         
@@ -131,6 +184,9 @@ class CourseLoader:
         Returns:
             Number of courses indexed
         """
+        # First, fetch descriptions from Hooslist
+        hooslist_descriptions = self._fetch_hooslist_descriptions(courses)
+        
         print(f"\n{'='*50}")
         print(f"INDEXING COURSES INTO VECTOR DATABASE")
         print(f"{'='*50}")
@@ -155,8 +211,12 @@ class CourseLoader:
                 continue
             seen.add(course_id)
             
-            # Create document text
-            doc_text = self.sis_service.get_course_document(course)
+            # Get Hooslist description for this course
+            desc_key = f"{course.get('subject', '')}_{course.get('catalog_nbr', '')}"
+            hooslist_info = hooslist_descriptions.get(desc_key, {})
+            
+            # Create document text with Hooslist info
+            doc_text = self.sis_service.get_course_document(course, hooslist_info)
             
             # Create metadata
             metadata = {
@@ -164,6 +224,8 @@ class CourseLoader:
                 "catalog_number": course.get("catalog_nbr", ""),
                 "title": course.get("descr", ""),
                 "class_number": str(course.get("class_nbr", "")),
+                "has_description": bool(hooslist_info.get("description")),
+                "has_prerequisites": bool(hooslist_info.get("prerequisites")),
             }
             
             documents.append(doc_text)

@@ -23,6 +23,9 @@ class SISService:
     # URL for getting department mnemonics
     OPTIONS_URL = "https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions"
     
+    # Hooslist URL for course descriptions
+    HOOSLIST_DESC_URL = "https://hooslist.virginia.edu/ClassSchedule/_GetCourseDescription"
+    
     # Common subject codes at UVA
     CS_SUBJECTS = ["CS", "DSA"]
     
@@ -130,6 +133,48 @@ class SISService:
             return api_response.get("classes", [])
         return []
     
+    def get_course_description(self, subject: str, course_num: str) -> dict:
+        """Fetch course description and prerequisites from Hooslist.
+        
+        Args:
+            subject: Subject code (e.g., "CS")
+            course_num: Course number (e.g., "4774")
+            
+        Returns:
+            Dictionary with 'description' and 'prerequisites' keys
+        """
+        try:
+            response = self.client.get(
+                self.HOOSLIST_DESC_URL,
+                params={"subject": subject.upper(), "courseNum": course_num},
+            )
+            response.raise_for_status()
+            
+            text = response.text.strip()
+            
+            # Parse the response - prerequisites are usually on a separate line
+            description = ""
+            prerequisites = ""
+            
+            if "Prerequisites:" in text:
+                parts = text.split("Prerequisites:", 1)
+                description = parts[0].strip()
+                prerequisites = parts[1].strip()
+            elif "Prerequisite:" in text:
+                parts = text.split("Prerequisite:", 1)
+                description = parts[0].strip()
+                prerequisites = parts[1].strip()
+            else:
+                description = text
+            
+            return {
+                "description": description,
+                "prerequisites": prerequisites,
+            }
+        except Exception as e:
+            print(f"[Hooslist] Error fetching description for {subject} {course_num}: {e}")
+            return {"description": "", "prerequisites": ""}
+    
     def parse_courses(self, api_response) -> list[Course]:
         """Parse API response into Course objects.
         
@@ -196,11 +241,12 @@ class SISService:
             return instructors[0].get("name", "Staff")
         return "Staff"
     
-    def get_course_document(self, cls: dict) -> str:
+    def get_course_document(self, cls: dict, hooslist_info: dict = None) -> str:
         """Convert course data to text document for RAG.
         
         Args:
             cls: Course class dictionary from API
+            hooslist_info: Optional dict with 'description' and 'prerequisites' from Hooslist
             
         Returns:
             Formatted text document
@@ -210,8 +256,15 @@ class SISService:
             f"Title: {cls.get('descr', '')}",
         ]
         
-        if cls.get("crse_descr"):
+        # Use Hooslist description if available, otherwise fall back to SIS description
+        if hooslist_info and hooslist_info.get("description"):
+            parts.append(f"Description: {hooslist_info['description']}")
+        elif cls.get("crse_descr"):
             parts.append(f"Description: {cls.get('crse_descr', '')}")
+        
+        # Add prerequisites from Hooslist
+        if hooslist_info and hooslist_info.get("prerequisites"):
+            parts.append(f"Prerequisites: {hooslist_info['prerequisites']}")
         
         if cls.get("units"):
             parts.append(f"Credits: {cls.get('units', '')}")

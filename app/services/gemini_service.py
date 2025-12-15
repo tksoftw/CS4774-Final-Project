@@ -33,6 +33,7 @@ class GeminiService:
         Returns:
             The assistant's response text
         """
+        print(prompt)
         # Combine system prompt and user prompt
         full_prompt = prompt
         if system_prompt:

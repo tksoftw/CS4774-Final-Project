@@ -1,11 +1,15 @@
 """Chat router for AI assistant interactions."""
 
 import uuid
+import logging
 from fastapi import APIRouter, Request, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from app.config import get_settings
 from app.services.rag_engine import RAGEngine
+
+# Setup logging
+logger = logging.getLogger("uvicorn.error")
 
 router = APIRouter(prefix="/chat", tags=["chat"])
 settings = get_settings()
@@ -42,7 +46,7 @@ async def send_message(
     message: str = Form(...),
     session_id: str = Form(...),
 ):
-    """Process a chat message and return response."""
+    """Process a chat message and return response directly (no redirect for speed)."""
     # Initialize session if needed
     if session_id not in chat_sessions:
         chat_sessions[session_id] = []
@@ -54,19 +58,20 @@ async def send_message(
     })
     
     try:
+        logger.info(f"[CHAT] Received message: {message}")
+        
         # Get RAG response
         rag_engine = RAGEngine()
+        logger.info("[CHAT] Calling RAG query...")
         result = rag_engine.query(message)
+        logger.info(f"[CHAT] Got result with {result.get('context_used', 0)} context docs")
         
         response_text = result["response"]
-        sources = result.get("sources", [])
-        
-        # Format sources if any
-        if sources:
-            source_text = "\n\n📚 Sources: " + ", ".join(sources[:3])
-            response_text += source_text
         
     except Exception as e:
+        import traceback
+        logger.error(f"[CHAT ERROR] {e}")
+        traceback.print_exc()
         response_text = f"I apologize, but I encountered an error processing your request. Please try again. (Error: {str(e)})"
     
     # Add assistant response
@@ -75,10 +80,16 @@ async def send_message(
         "content": response_text,
     })
     
-    # Redirect back to chat page
-    return RedirectResponse(
-        url=f"/chat?session_id={session_id}",
-        status_code=303,
+    # Return rendered page directly (faster than redirect)
+    messages = chat_sessions.get(session_id, [])
+    return templates.TemplateResponse(
+        "chat.html",
+        {
+            "request": request,
+            "session_id": session_id,
+            "messages": messages,
+            "title": "Chat - UVA Course Assistant",
+        }
     )
 
 
