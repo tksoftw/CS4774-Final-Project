@@ -7,6 +7,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pathlib import Path
 
+from app.services import RAGEngine
 from app.config import get_settings
 from app.routers import chat_router, courses_router, schedule_router
 from app.data.course_loader import CourseLoader

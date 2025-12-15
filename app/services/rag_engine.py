@@ -78,7 +78,6 @@ Provide a helpful, accurate response based on the course information above. If t
                     sources.append(source_str)
         
         context = "\n\n".join(context_parts) if context_parts else "No specific course information found."
-        
         # Build the prompt
         user_prompt = self.QUERY_PROMPT_TEMPLATE.format(
             context=context,

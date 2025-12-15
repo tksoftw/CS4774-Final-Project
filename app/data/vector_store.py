@@ -1,6 +1,7 @@
 """ChromaDB vector store for semantic search."""
 
 import re
+import logging
 import chromadb
 from chromadb.config import Settings as ChromaSettings
 from typing import Optional
@@ -8,6 +9,7 @@ from pathlib import Path
 from app.config import get_settings
 from app.services.gemini_service import GeminiService
 
+logging.getLogger("chromadb").setLevel(logging.ERROR) # fix chromadb logging
 
 class VectorStore:
     """Vector database for storing and searching course embeddings."""
