@@ -179,7 +179,7 @@ CS4774-Final-Project/
 
 ## Video Demo
 
-*Link to demo video coming soon*
+https://youtu.be/IAYtRCeQ7_s
 
 ---
 
