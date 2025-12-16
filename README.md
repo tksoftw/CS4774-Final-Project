@@ -86,9 +86,10 @@ The repository includes pre-cached data files for RateMyProfessor and CourseForu
 
 ```bash
 # Build RateMyProfessors cache (takes a while)
-python scripts/build_rmp_cache.py
+python -m scripts/build_rmp_cache.py
 
 # TCF instructor reviews are already cached in app/data/cache/tcf_instructor_reviews.json
+python -m app.data.sources.tcf_reviews_json_generator
 ```
 
 ## Usage
