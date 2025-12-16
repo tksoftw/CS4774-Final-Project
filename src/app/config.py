@@ -160,10 +160,12 @@ class Settings(BaseSettings):
     sis_api_base_url: str = "https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch"
     
     # Paths
-    base_dir: Path = Path(__file__).parent.parent
-    templates_dir: Path = base_dir / "templates"
-    static_dir: Path = base_dir / "static"
-    data_dir: Path = base_dir / "data"
+    # src/ directory (contains app/, templates/, static/)
+    src_dir: Path = Path(__file__).parent.parent
+    templates_dir: Path = src_dir / "templates"
+    static_dir: Path = src_dir / "static"
+    # data/ is at project root (same level as src/)
+    data_dir: Path = src_dir.parent / "data"
     
     class Config:
         env_file = ".env"

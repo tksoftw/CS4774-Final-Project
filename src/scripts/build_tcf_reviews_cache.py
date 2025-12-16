@@ -1,8 +1,11 @@
-"""Script to scrape all instructor reviews and store them in JSON cache."""
+"""Script to scrape all instructor reviews and store them in JSON cache.
+
+Run from project root: python src/scripts/build_tcf_reviews_cache.py
+"""
 
 import json
 import time
-from ..app.data.sources.tcf_review_scraper import scrape_all_course_reviews
+from app.data.sources.tcf_review_scraper import scrape_all_course_reviews
 from app.data.stores.tcf_instructor_reviews_store import TCFInstructorReviewsStore
 
 def parse_course_id_from_url(profile_url: str) -> int:

@@ -62,6 +62,9 @@ source venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
+
+# Install the app package (enables imports)
+pip install -e .
 ```
 
 ### 2. Configure environment
@@ -85,11 +88,9 @@ Get a free API key from: https://aistudio.google.com/apikey
 The repository includes pre-cached data files for RateMyProfessor and CourseForum reviews. If you need to rebuild them from scratch:
 
 ```bash
-# Build RateMyProfessors cache (takes a while)
-python -m app.scripts.build_rmp_cache
-
-# Build TheCourseForum instructor reviews cache (also takes a while)
-python -m app.scripts.tcf_reviews_json_generator
+# Activate virtual environment first, then run from project root:
+python src/scripts/build_rmp_cache.py
+python src/scripts/build_tcf_reviews_cache.py
 ```
 
 ## Usage
@@ -97,7 +98,7 @@ python -m app.scripts.tcf_reviews_json_generator
 ### 1. Start the server
 
 ```bash
-python -m uvicorn app.main:app --reload
+uvicorn app.main:app --reload
 ```
 
 ### 2. Index course data (first time only)
@@ -156,15 +157,20 @@ Try asking the AI assistant:
 
 ```
 CS4774-Final-Project/
-├── app/
-│   ├── main.py              # FastAPI entry point
-│   ├── config.py            # Settings and configuration
-│   ├── routers/             # API routes (chat, courses, schedule)
-│   ├── services/            # RAG engine, Gemini service
-│   └── data/                # Vector store, data loaders, cache
-├── templates/               # Jinja2 HTML templates
-├── static/css/              # Stylesheets
+├── src/
+│   ├── app/
+│   │   ├── main.py          # FastAPI entry point
+│   │   ├── config.py        # Settings and configuration
+│   │   ├── routers/         # API routes (chat, courses, schedule)
+│   │   ├── services/        # RAG engine, Gemini service
+│   │   ├── data/            # Vector store, data loaders
+│   │   └── models/          # Data models
+│   ├── scripts/             # Cache building scripts
+│   ├── templates/           # Jinja2 HTML templates
+│   └── static/              # CSS and images
 ├── data/                    # ChromaDB + cached API responses
+├── tests/                   # Test files
+├── pyproject.toml           # Package configuration
 ├── requirements.txt
 └── README.md
 ```

@@ -3,6 +3,8 @@ Incrementally build the RateMyProfessor course cache.
 
 Auto-stops when there are no more professors left to process.
 Safe to run multiple times (resumes from progress file).
+
+Run from project root: python src/scripts/build_rmp_cache.py
 """
 
 import time
