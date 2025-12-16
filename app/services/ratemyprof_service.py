@@ -25,7 +25,7 @@ class RateMyProfessorService:
         self.testing = testing
         self.reviews_cache_ttl_seconds = reviews_cache_ttl_seconds
 
-        # Put cache in app/data/cache by default
+        # put cache in app/data/cache by default
         if cache_dir is None:
             cache_dir = os.path.join("app", "data", "cache")
         self.cache_dir = cache_dir
@@ -33,10 +33,6 @@ class RateMyProfessorService:
 
         base = os.path.join(self.cache_dir, f"rmp_reviews_{self.school_id}")
         self.reviews_store = RMPReviewsStore(base)
-
-        # Per-prof reviews cache folder
-        self.reviews_cache_dir = os.path.join(self.cache_dir, "reviews_cache")
-        os.makedirs(self.reviews_cache_dir, exist_ok=True)
 
         self._api: Optional[RateMyProfApi] = None
 
@@ -219,7 +215,6 @@ class RateMyProfessorService:
             if sleep_between_requests > 0:
                 time.sleep(sleep_between_requests)
 
-            # 🔥 Use cached reviews per professor (massive speedup + fewer calls)
             try:
                 reviews = self.get_reviews_for_professor_cached(
                     tid,
