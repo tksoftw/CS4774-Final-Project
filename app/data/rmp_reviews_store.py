@@ -37,19 +37,26 @@ class RMPReviewsStore:
     def has_reviews(self, tid: int) -> bool:
         return str(tid) in self.index and self.index[str(tid)].get("count", 0) > 0
 
-    def append_reviews(self, tid: int, reviews: List[Dict[str, Any]]) -> None:
+    def append_reviews(
+        self,
+        tid: int,
+        professor_name: str,
+        reviews: List[Dict[str, Any]],
+    ) -> None:
         """
         Append reviews for a professor to the JSONL file and update index.
-        Each stored line includes tid so the JSONL file is self-contained.
+        Each stored line includes professor context.
         """
         tid_key = str(tid)
         entry = self.index.get(tid_key) or {"offsets": [], "count": 0}
 
-        # open in binary so byte offsets are accurate
         with open(self.jsonl_path, "ab") as f:
             for r in reviews:
-                # include tid in each record
-                record = {"tid": tid, **r}
+                record = {
+                    "professor_tid": tid,
+                    "professor_name": professor_name,
+                    **r,
+                }
                 line = (json.dumps(record, ensure_ascii=False) + "\n").encode("utf-8")
 
                 offset = f.tell()
@@ -60,6 +67,7 @@ class RMPReviewsStore:
 
         self.index[tid_key] = entry
         self._save_index()
+
 
     def get_reviews_for_professor(self, tid: int, limit: int = 200) -> List[Dict[str, Any]]:
         """

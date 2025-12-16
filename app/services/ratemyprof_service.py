@@ -158,7 +158,15 @@ class RateMyProfessorService:
             reviews = filtered
 
         # append to the single JSONL store
-        self.reviews_store.append_reviews(tid, reviews)
+        professor = self.api.professors.get(tid)
+        prof_name = professor.name if professor else "UNKNOWN"
+
+        self.reviews_store.append_reviews(
+            tid=tid,
+            professor_name=prof_name,
+            reviews=reviews,
+        )
+
 
         return reviews[:limit]
 
