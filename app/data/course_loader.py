@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Optional
 from app.config import get_settings
 from app.services.sis_service import SISService
+from app.data.scrapers.tcf_scraper import scrape_course, BASE_URL  # Import the function
 from app.data.vector_store import VectorStore
 
 
@@ -175,6 +176,68 @@ class CourseLoader:
         
         return descriptions
     
+    def _fetch_tcf_reviews(self, courses: list[dict]) -> dict:
+        """Fetch reviews from TheCourseForum for unique courses.
+        
+        Args:
+            courses: List of course dictionaries
+            
+        Returns:
+            Dictionary mapping "SUBJECT_CATALOG" to reviews list
+        """
+        # Get unique course identifiers
+        unique_courses = {}
+        for course in courses:
+            key = f"{course.get('subject', '')}_{course.get('catalog_nbr', '')}"
+            if key not in unique_courses:
+                unique_courses[key] = {
+                    "subject": course.get("subject", ""),
+                    "catalog_nbr": course.get("catalog_nbr", ""),
+                }
+        
+        print(f"\n{'='*50}")
+        print(f"FETCHING REVIEWS FROM THECOURSEFORUM")
+        print(f"{'='*50}")
+        print(f"Unique courses to fetch: {len(unique_courses)}")
+        print()
+        
+        reviews_map = {}
+        total = len(unique_courses)
+        start_time = time.time()
+        successful = 0
+        failed = 0
+        
+        for idx, (key, info) in enumerate(unique_courses.items(), 1):
+            subject = info["subject"]
+            catalog_nbr = info["catalog_nbr"]
+            
+            if idx % 10 == 0 or idx == total:
+                elapsed = time.time() - start_time
+                rate = idx / elapsed if elapsed > 0 else 0
+                eta = (total - idx) / rate if rate > 0 else 0
+                print(f"  [{idx}/{total}] Fetching reviews... ({elapsed:.1f}s elapsed, ETA: {eta:.0f}s, ✓{successful} ✗{failed})", flush=True)
+            
+            try:
+                # Build the course URL
+                course_url = f"{BASE_URL}/{subject}/{catalog_nbr}/"
+                reviews = scrape_course(course_url)
+                reviews_map[key] = reviews
+                if reviews:
+                    successful += 1
+                else:
+                    failed += 1
+            except Exception as e:
+                print(f"\n  Warning: Failed to fetch reviews for {subject} {catalog_nbr}: {e}")
+                reviews_map[key] = []
+                failed += 1
+        
+        total_time = time.time() - start_time
+        print(f"\nFetched reviews for {len(reviews_map)} courses in {total_time:.1f}s")
+        print(f"  - Successful: {successful}")
+        print(f"  - Not found/Failed: {failed}")
+        
+        return reviews_map
+    
     def _index_courses(self, courses: list[dict]) -> int:
         """Index courses into vector store.
         
@@ -186,6 +249,9 @@ class CourseLoader:
         """
         # First, fetch descriptions from Hooslist
         hooslist_descriptions = self._fetch_hooslist_descriptions(courses)
+        
+        # Then, fetch reviews from TheCourseForum
+        tcf_reviews = self._fetch_tcf_reviews(courses)
         
         print(f"\n{'='*50}")
         print(f"INDEXING COURSES INTO VECTOR DATABASE")
@@ -215,8 +281,12 @@ class CourseLoader:
             desc_key = f"{course.get('subject', '')}_{course.get('catalog_nbr', '')}"
             hooslist_info = hooslist_descriptions.get(desc_key, {})
             
-            # Create document text with Hooslist info
-            doc_text = self.sis_service.get_course_document(course, hooslist_info)
+            # Get TCF reviews for this course
+            reviews = tcf_reviews.get(desc_key, [])
+            
+            # Create document text - use SIS service method and append reviews
+            base_doc = self.sis_service.get_course_document(course, hooslist_info)
+            doc_text = self._append_reviews_to_document(base_doc, reviews)
             
             # Create metadata
             metadata = {
@@ -226,6 +296,8 @@ class CourseLoader:
                 "class_number": str(course.get("class_nbr", "")),
                 "has_description": bool(hooslist_info.get("description")),
                 "has_prerequisites": bool(hooslist_info.get("prerequisites")),
+                "has_reviews": len(reviews) > 0,
+                "review_count": len(reviews),
             }
             
             documents.append(doc_text)
@@ -276,6 +348,42 @@ class CourseLoader:
         
         return len(documents)
     
+    def _append_reviews_to_document(self, base_doc: str, reviews: list[dict]) -> str:
+        """Append TCF review data to existing course document.
+        
+        Args:
+            base_doc: Base document from SIS service
+            reviews: Review data from TheCourseForum
+            
+        Returns:
+            Document with reviews appended
+        """
+        if not reviews:
+            return base_doc
+        
+        review_parts = [f"\n\nReviews ({len(reviews)} instructors):"]
+        
+        for review in reviews:
+            instructor = review.get("instructor_name", "Unknown")
+            rating = review.get("rating", "—")
+            difficulty = review.get("difficulty", "—")
+            gpa = review.get("gpa", "—")
+            last_taught = review.get("last_taught", "")
+            
+            review_text = f"  {instructor}"
+            if rating and rating != "—":
+                review_text += f" | Rating: {rating}/5"
+            if difficulty and difficulty != "—":
+                review_text += f" | Difficulty: {difficulty}/5"
+            if gpa and gpa != "—":
+                review_text += f" | Avg GPA: {gpa}"
+            if last_taught:
+                review_text += f" | Last taught: {last_taught}"
+            
+            review_parts.append(review_text)
+        
+        return base_doc + "\n".join(review_parts)
+    
     def get_status(self) -> dict:
         """Get current indexing status.
         
@@ -286,4 +394,3 @@ class CourseLoader:
             "indexed_count": self.vector_store.count(),
             "cache_files": list(self.data_dir.glob("*.json")),
         }
-
