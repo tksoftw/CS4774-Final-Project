@@ -222,7 +222,7 @@ CS4774-Final-Project/
 | Component | Technology | Purpose |
 |-----------|------------|---------|
 | Web Framework | FastAPI | High-performance Python web framework |
-| AI/LLM | Google Gemini 2.0 Flash | Natural language understanding & generation |
+| AI/LLM | Google Gemini 2.5 Flash Lite | Natural language understanding & generation |
 | Vector DB | ChromaDB | Semantic search over course data |
 | Embeddings | Gemini gemini-embedding-001 | Document vectorization |
 | Templating | Jinja2 | Server-side HTML rendering |
@@ -316,7 +316,7 @@ CS4774-Final-Project/
 - **Data:** Course descriptions, prerequisites
 
 ### Google Gemini API
-- **Model:** gemini-2.0-flash
+- **Model:** gemini-2.5-flash
 - **Embeddings:** gemini-embedding-001
 - **Features:** Fast generation, document/query task types
 
