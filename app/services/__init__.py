@@ -6,7 +6,7 @@ from .rag_engine import RAGEngine
 
 __all__ = [
     "GeminiService",
-    "SISService", 
+    "SISService",
     "RAGEngine",
 ]
 
