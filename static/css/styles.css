@@ -650,6 +650,30 @@ a:hover {
     color: var(--uva-orange);
 }
 
+/* Course already added to schedule */
+.course-card.course-added {
+    opacity: 0.6;
+    border-color: var(--text-muted);
+}
+
+.course-card.course-added:hover {
+    border-color: var(--text-muted);
+    opacity: 0.7;
+}
+
+.course-card.course-added .course-code {
+    color: var(--text-muted);
+}
+
+.badge-added {
+    font-size: 0.7rem;
+    color: var(--accent-green);
+    background: rgba(63, 185, 80, 0.15);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
 /* ===== Schedule Grid ===== */
 .schedule-container {
     overflow-x: auto;

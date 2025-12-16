@@ -10,6 +10,12 @@ _last_context: dict[str, str] = {}
 _last_query: dict[str, str] = {}
 
 
+def get_user_schedule(user_id: str = "default") -> list[dict]:
+    """Get user's schedule (lazy import to avoid circular dependency)."""
+    from app.routers.schedule import user_schedules
+    return user_schedules.get(user_id, [])
+
+
 class RAGEngine:
     """RAG engine for course-aware AI responses."""
     
@@ -25,6 +31,8 @@ Guidelines:
 - Suggest courses based on student interests and requirements
 - Try to use markdown formatting to make the response more readable and visually appealing.
 - Courses may include lab/discussion sections which will be listed as 0 credits
+- When the student's current schedule is provided, consider it when making recommendations (e.g., avoid time conflicts, suggest complementary courses)
+- If asked about their schedule, use the STUDENT'S CURRENT SCHEDULE information provided
 
 IMPORTANT - Handling follow-up requests:
 - When user says "keep going", "more info", "tell me more", "continue", "yes", "elaborate", etc., provide ADDITIONAL details you haven't mentioned yet
@@ -130,18 +138,36 @@ When discussing general course information (e.g. "What are some good courses to 
 
 RELEVANT COURSE INFORMATION (from catalog):
 {context}
-
+{schedule_context}
 STUDENT QUESTION:
 {question}
 
 Provide a helpful, accurate response. For specific course details (instructors, times, descriptions), use the RELEVANT COURSE INFORMATION.
 """
     
+    def _format_schedule_context(self, user_id: str = "default") -> str:
+        """Format user's schedule as context for the prompt."""
+        schedule = get_user_schedule(user_id)
+        if not schedule:
+            return ""
+        
+        lines = ["\nSTUDENT'S CURRENT SCHEDULE:"]
+        for item in schedule:
+            course_line = f"- {item['course_id']}: {item['title']}"
+            if item.get('days') and item.get('start_time'):
+                course_line += f" ({item['days']} {item['start_time']}-{item['end_time']})"
+            if item.get('instructor'):
+                course_line += f" with {item['instructor']}"
+            lines.append(course_line)
+        
+        return "\n".join(lines) + "\n"
+    
     def query(
         self,
         question: str,
         session_id: Optional[str] = None,
         n_results: int = 15,  # Increased from 5 to 10 for better recall
+        user_id: str = "default",
     ) -> dict:
         """Process a user query with RAG.
         
@@ -149,6 +175,7 @@ Provide a helpful, accurate response. For specific course details (instructors, 
             question: User's question
             session_id: Optional session ID for conversation memory
             n_results: Number of documents to retrieve
+            user_id: User ID for schedule context
             
         Returns:
             Dictionary with response and sources
@@ -188,9 +215,13 @@ Provide a helpful, accurate response. For specific course details (instructors, 
                 _last_context[session_id] = context
                 _last_query[session_id] = question
         
+        # Get schedule context
+        schedule_context = self._format_schedule_context(user_id)
+        
         # Build the prompt with context
         user_prompt = self.QUERY_PROMPT_TEMPLATE.format(
             context=context,
+            schedule_context=schedule_context,
             question=question,
         )
         
@@ -239,12 +270,14 @@ Provide a helpful, accurate response. For specific course details (instructors, 
         self,
         question: str,
         n_results: int = 10,
+        user_id: str = "default",
     ):
         """Process a user query with RAG and stream the response.
         
         Args:
             question: User's question
             n_results: Number of documents to retrieve
+            user_id: User ID for schedule context
             
         Yields:
             Text chunks as they are generated
@@ -261,9 +294,13 @@ Provide a helpful, accurate response. For specific course details (instructors, 
         
         context = "\n\n".join(context_parts) if context_parts else "No specific course information found."
         
+        # Get schedule context
+        schedule_context = self._format_schedule_context(user_id)
+        
         # Build the prompt
         user_prompt = self.QUERY_PROMPT_TEMPLATE.format(
             context=context,
+            schedule_context=schedule_context,
             question=question,
         )
         
