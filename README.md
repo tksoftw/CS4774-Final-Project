@@ -1,4 +1,4 @@
-# UVA AI Course Assistant
+# HoosAdvisor
 
 **CS 4774 Machine Learning – Final Project**
 
