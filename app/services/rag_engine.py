@@ -121,18 +121,39 @@ Provide a helpful, accurate response. For specific course details (instructors, 
         # Format context from retrieved documents
         context_parts = []
         sources = []
+        context_parts = []
         
-        for i, doc in enumerate(search_results["documents"]):
-            if doc:
-                context_parts.append(f"[Source {i+1}]\n{doc}")
-                
-                # Extract source info from metadata
-                metadata = search_results["metadatas"][i] if search_results["metadatas"] else {}
-                if metadata:
-                    source_str = f"{metadata.get('subject', '')} {metadata.get('catalog_number', '')} - {metadata.get('title', '')}"
-                    sources.append(source_str)
+        # Check if this is a follow-up - reuse previous context if so
+        is_followup = session_id and self._is_followup(question) and session_id in _last_context
         
-        context = "\n\n".join(context_parts) if context_parts else "No specific course information found."
+        if is_followup:
+            # Reuse previous context for follow-up questions
+            context = _last_context[session_id]
+            # Enhance the question to make it clearer
+            original_q = _last_query.get(session_id, "")
+            question = f"(Follow-up to previous question about '{original_q}'): {question}"
+            context_parts = ["(using cached context from previous query)"]
+        else:
+            # New question - do fresh RAG retrieval
+            search_results = self.vector_store.search(query=question, n_results=n_results)
+            
+            # Format context from retrieved documents
+            for i, doc in enumerate(search_results["documents"]):
+                if doc:
+                    context_parts.append(f"[Source {i+1}]\n{doc}")
+                    
+                    # Extract source info from metadata
+                    metadata = search_results["metadatas"][i] if search_results["metadatas"] else {}
+                    if metadata:
+                        source_str = f"{metadata.get('subject', '')} {metadata.get('catalog_number', '')} - {metadata.get('title', '')}"
+                        sources.append(source_str)
+            
+            context = "\n\n".join(context_parts) if context_parts else "No specific course information found."
+            
+            # Store context for potential follow-ups
+            if session_id:
+                _last_context[session_id] = context
+                _last_query[session_id] = question
         
         # Build the prompt with context
         user_prompt = self.QUERY_PROMPT_TEMPLATE.format(
