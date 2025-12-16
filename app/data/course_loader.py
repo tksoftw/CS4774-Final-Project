@@ -220,15 +220,15 @@ class CourseLoader:
             try:
                 # Build the course URL
                 course_url = f"{BASE_URL}/{subject}/{catalog_nbr}/"
-                reviews = scrape_course(course_url)
-                reviews_map[key] = reviews
-                if reviews:
+                result = scrape_course(course_url)
+                reviews_map[key] = result  # Now stores both instructors and course_stats
+                if result.get("instructors"):
                     successful += 1
                 else:
                     failed += 1
             except Exception as e:
                 print(f"\n  Warning: Failed to fetch reviews for {subject} {catalog_nbr}: {e}")
-                reviews_map[key] = []
+                reviews_map[key] = {"instructors": [], "course_stats": None}
                 failed += 1
         
         total_time = time.time() - start_time
@@ -282,7 +282,9 @@ class CourseLoader:
             hooslist_info = hooslist_descriptions.get(desc_key, {})
             
             # Get TCF reviews for this course
-            all_reviews = tcf_reviews.get(desc_key, [])
+            tcf_data = tcf_reviews.get(desc_key, {"instructors": [], "course_stats": None})
+            all_reviews = tcf_data.get("instructors", [])
+            course_stats = tcf_data.get("course_stats")
             
             # Filter reviews to only include instructors teaching this specific section
             section_instructors = course.get("instructors", [])
@@ -321,7 +323,7 @@ class CourseLoader:
             
             # Create document text - use SIS service method and append reviews
             base_doc = self.sis_service.get_course_document(course, hooslist_info)
-            doc_text = self._append_reviews_to_document(base_doc, matched_reviews)
+            doc_text = self._append_reviews_to_document(base_doc, matched_reviews, course_stats)
             
             # Create metadata
             metadata = {
@@ -383,44 +385,94 @@ class CourseLoader:
         
         return len(documents)
     
-    def _append_reviews_to_document(self, base_doc: str, reviews: list[dict]) -> str:
+    def _append_reviews_to_document(self, base_doc: str, reviews: list[dict], course_stats: dict = None) -> str:
         """Append TCF review data to existing course document.
         
         Args:
             base_doc: Base document from SIS service
-            reviews: Review data from TheCourseForum
+            reviews: Review data from TheCourseForum (instructor-specific)
+            course_stats: Course-level statistics from TheCourseForum
             
         Returns:
-            Document with reviews appended
+            Document with reviews and stats appended
         """
+        doc_parts = []
+        
+        # Add instructor reviews
         if not reviews:
-            return base_doc + "\n\nReviews: No review data available on TheCourseForum."
+            doc_parts.append("\n\nInstructor Reviews: No review data available on TheCourseForum.")
+        else:
+            doc_parts.append(f"\n\nInstructor Reviews ({len(reviews)} instructors):")
+            
+            for review in reviews:
+                instructor = review.get("instructor_name", "Unknown")
+                rating = review.get("rating")
+                difficulty = review.get("difficulty")
+                gpa = review.get("gpa")
+                last_taught = review.get("last_taught", "")
+                
+                review_text = f"  {instructor}"
+                
+                # Only add metrics if they exist and aren't "—"
+                if rating and rating != "—":
+                    review_text += f" | Rating: {rating}/5"
+                if difficulty and difficulty != "—":
+                    review_text += f" | Difficulty: {difficulty}/5"
+                if gpa and gpa != "—":
+                    review_text += f" | Avg GPA: {gpa}"
+                if last_taught and last_taught != "—":
+                    review_text += f" | Last taught: {last_taught}"
+                
+                # If no metrics were added, note that
+                if review_text == f"  {instructor}":
+                    review_text += " | No ratings available"
+                
+                doc_parts.append(review_text)
         
-        review_parts = [f"\n\nReviews ({len(reviews)} instructors):"]
+        # Add course-level statistics
+        if course_stats:
+            doc_parts.append("\n\nCourse Statistics:")
+            
+            # Overall ratings
+            if course_stats.get("average_rating"):
+                doc_parts.append(f"  Overall Rating: {course_stats['average_rating']:.2f}/5")
+            if course_stats.get("average_difficulty"):
+                doc_parts.append(f"  Difficulty: {course_stats['average_difficulty']:.2f}/5")
+            if course_stats.get("average_gpa"):
+                doc_parts.append(f"  Average GPA: {course_stats['average_gpa']:.2f}")
+            
+            # Workload
+            doc_parts.append("\n  Workload:")
+            if course_stats.get("average_hours_per_week"):
+                doc_parts.append(f"    Hours per week: {course_stats['average_hours_per_week']:.1f}")
+            if course_stats.get("average_amount_homework"):
+                doc_parts.append(f"    Homework: {course_stats['average_amount_homework']:.1f}/5")
+            if course_stats.get("average_amount_reading"):
+                doc_parts.append(f"    Reading: {course_stats['average_amount_reading']:.1f}/5")
+            if course_stats.get("average_amount_writing"):
+                doc_parts.append(f"    Writing: {course_stats['average_amount_writing']:.1f}/5")
+            if course_stats.get("average_amount_group"):
+                doc_parts.append(f"    Group work: {course_stats['average_amount_group']:.1f}/5")
+            
+            # Subjective ratings
+            doc_parts.append("\n  Course Quality:")
+            if course_stats.get("average_instructor"):
+                doc_parts.append(f"    Instructor quality: {course_stats['average_instructor']:.2f}/5")
+            if course_stats.get("average_fun"):
+                doc_parts.append(f"    Enjoyability: {course_stats['average_fun']:.2f}/5")
+            if course_stats.get("average_recommendability"):
+                doc_parts.append(f"    Recommendability: {course_stats['average_recommendability']:.2f}/5")
+            
+            # Grade distribution
+            if course_stats.get("grade_distribution"):
+                doc_parts.append("\n  Grade Distribution:")
+                dist = course_stats["grade_distribution"]
+                doc_parts.append(f"    A+: {dist['A+']}% | A: {dist['A']}% | A-: {dist['A-']}%")
+                doc_parts.append(f"    B+: {dist['B+']}% | B: {dist['B']}% | B-: {dist['B-']}%")
+                doc_parts.append(f"    C+: {dist['C+']}% | C: {dist['C']}% | C-: {dist['C-']}%")
+                doc_parts.append(f"    D/F/W: {dist['D/F/W']}%")
         
-        for review in reviews:
-            instructor = review.get("instructor_name", "Unknown")
-            rating = review.get("rating")
-            difficulty = review.get("difficulty")
-            gpa = review.get("gpa")
-            
-            review_text = f"  {instructor}"
-            
-            # Only add metrics if they exist and aren't "—"
-            if rating and rating != "—":
-                review_text += f" | Rating: {rating}/5"
-            if difficulty and difficulty != "—":
-                review_text += f" | Difficulty: {difficulty}/5"
-            if gpa and gpa != "—":
-                review_text += f" | Avg GPA: {gpa}"
-            
-            # If no metrics were added, note that
-            if review_text == f"  {instructor}":
-                review_text += " | No ratings available"
-            
-            review_parts.append(review_text)
-        
-        return base_doc + "\n".join(review_parts)
+        return base_doc + "\n".join(doc_parts)
     
     def get_status(self) -> dict:
         """Get current indexing status.
