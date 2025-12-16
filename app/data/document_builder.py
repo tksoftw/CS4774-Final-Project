@@ -8,6 +8,7 @@ from typing import Optional
 from app.config import get_settings, get_course_clusters, get_cluster_description, CLUSTER_WEIGHTS
 from app.data.sources.sis_api import SISApi
 from app.data.stores.rmp_reviews_loader import get_rmp_loader
+from app.data.stores.tcf_reviews_loader import get_tcf_loader
 
 
 class DocumentBuilder:
@@ -122,8 +123,8 @@ class DocumentBuilder:
         # Build base document
         base_doc = "\n".join(parts)
         
-        # Append TCF reviews if available
-        doc_with_tcf = self._append_reviews(base_doc, reviews)
+        # Append TCF reviews matched by course + instructor
+        doc_with_tcf = self._append_tcf_reviews(base_doc, course)
         
         # Append RMP reviews for this semester's instructors
         if include_rmp:
@@ -147,44 +148,70 @@ class DocumentBuilder:
             return course.get('crse_descr', '')
         return ""
     
-    def _append_reviews(self, base_doc: str, reviews: Optional[list[dict]]) -> str:
-        """Append TCF review data to document.
+    def _append_tcf_reviews(self, base_doc: str, course: dict) -> str:
+        """Append TCF review data matched by course + instructor.
         
         Args:
             base_doc: Base document text
-            reviews: List of review dictionaries from TheCourseForum
+            course: Course dictionary from SIS (with 'instructors' list)
             
         Returns:
-            Document with reviews appended
+            Document with TCF reviews appended
         """
-        if not reviews:
-            return base_doc + "\n\nTCF Reviews: No review data available."
+        tcf_loader = get_tcf_loader()
+        instructors = course.get("instructors", [])
+        subject = course.get("subject", "")
+        catalog_nbr = course.get("catalog_nbr", "")
         
-        review_parts = [f"\n\nTCF Reviews ({len(reviews)} instructors):"]
+        if not instructors:
+            return base_doc
         
-        for review in reviews:
-            instructor = review.get("instructor_name", "Unknown")
-            rating = review.get("rating")
-            difficulty = review.get("difficulty")
-            gpa = review.get("gpa")
+        tcf_parts = []
+        
+        for inst in instructors:
+            inst_name = inst.get("name", "").strip()
+            if not inst_name or inst_name.lower() == "staff":
+                continue
             
-            review_text = f"  {instructor}"
+            # Get TCF reviews for this instructor + course combo
+            tcf_data = tcf_loader.get_reviews_for_instructor(
+                subject, catalog_nbr, inst_name, limit=3
+            )
             
-            # Only add metrics if they exist and aren't "—"
+            if not tcf_data:
+                continue
+            
+            # Format instructor section
+            inst_section = f"\n  {inst_name} (TheCourseForum):"
+            
+            rating = tcf_data.get("rating")
+            difficulty = tcf_data.get("difficulty")
+            gpa = tcf_data.get("gpa")
+            
             if rating and rating != "—":
-                review_text += f" | Rating: {rating}/5"
+                inst_section += f"\n    - Rating: {rating}/5"
             if difficulty and difficulty != "—":
-                review_text += f" | Difficulty: {difficulty}/5"
+                inst_section += f"\n    - Difficulty: {difficulty}/5"
             if gpa and gpa != "—":
-                review_text += f" | Avg GPA: {gpa}"
+                inst_section += f"\n    - Avg GPA: {gpa}"
             
-            # If no metrics were added, note that
-            if review_text == f"  {instructor}":
-                review_text += " | No ratings available"
+            # Add sample review texts
+            sample_reviews = tcf_data.get("sample_reviews", [])
+            if sample_reviews:
+                inst_section += "\n    - Student reviews:"
+                for review_text in sample_reviews[:2]:
+                    # Truncate long reviews
+                    truncated = review_text[:200] + "..." if len(review_text) > 200 else review_text
+                    # Clean up newlines
+                    truncated = truncated.replace("\n", " ")
+                    inst_section += f"\n      * \"{truncated}\""
             
-            review_parts.append(review_text)
+            tcf_parts.append(inst_section)
         
-        return base_doc + "\n".join(review_parts)
+        if not tcf_parts:
+            return base_doc
+        
+        return base_doc + f"\n\nTheCourseForum Reviews:" + "".join(tcf_parts)
     
     def _append_rmp_reviews(self, base_doc: str, course: dict) -> str:
         """Append RateMyProfessor reviews for this semester's instructors.
@@ -254,14 +281,12 @@ class DocumentBuilder:
         self,
         course: dict,
         hooslist_info: Optional[dict] = None,
-        reviews: Optional[list[dict]] = None,
     ) -> dict:
         """Build metadata for a course document.
         
         Args:
             course: Course dictionary from SIS
             hooslist_info: Optional Hooslist info
-            reviews: Optional list of reviews
             
         Returns:
             Metadata dictionary for vector store
@@ -271,6 +296,19 @@ class DocumentBuilder:
         course_code = f"{subject} {catalog_number}"
         clusters = get_course_clusters(course_code)
         
+        # Check if TCF has reviews for this course's instructors
+        tcf_loader = get_tcf_loader()
+        instructors = course.get("instructors", [])
+        has_tcf = False
+        tcf_count = 0
+        for inst in instructors:
+            inst_name = inst.get("name", "").strip()
+            if inst_name and inst_name.lower() != "staff":
+                data = tcf_loader.get_reviews_for_instructor(subject, catalog_number, inst_name)
+                if data:
+                    has_tcf = True
+                    tcf_count += data.get("review_count", 0)
+        
         return {
             "subject": subject,
             "catalog_number": catalog_number,
@@ -278,8 +316,8 @@ class DocumentBuilder:
             "class_number": str(course.get("class_nbr", "")),
             "has_description": bool(hooslist_info and hooslist_info.get("description")),
             "has_prerequisites": bool(hooslist_info and hooslist_info.get("prerequisites")),
-            "has_reviews": bool(reviews),
-            "review_count": len(reviews) if reviews else 0,
+            "has_reviews": has_tcf,
+            "review_count": tcf_count,
             "clusters": ",".join(clusters) if clusters else "",
             "course_code": course_code,
         }

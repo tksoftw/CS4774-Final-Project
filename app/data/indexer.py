@@ -316,17 +316,13 @@ class CourseIndexer:
                 continue
             seen.add(course_id)
             
-            # Get data for this course
+            # Get Hooslist data for this course
             key = f"{course.get('subject', '')}_{course.get('catalog_nbr', '')}"
             hooslist_info = hooslist_data.get(key, {})
-            all_reviews = tcf_data.get(key, [])
             
-            # Match reviews to this section's instructors
-            matched_reviews = self.doc_builder.match_reviews_to_instructors(course, all_reviews)
-            
-            # Build document and metadata
-            doc_text = self.doc_builder.build_document(course, hooslist_info, matched_reviews)
-            metadata = self.doc_builder.build_metadata(course, hooslist_info, matched_reviews)
+            # Build document (TCF + RMP reviews are loaded internally by document builder)
+            doc_text = self.doc_builder.build_document(course, hooslist_info)
+            metadata = self.doc_builder.build_metadata(course, hooslist_info)
             
             documents.append(doc_text)
             metadatas.append(metadata)
