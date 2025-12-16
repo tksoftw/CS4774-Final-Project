@@ -99,7 +99,7 @@ python scripts/build_rmp_cache.py
 python -m uvicorn app.main:app --reload
 ```
 
-### 2 Index course data (first time only)
+### 2. Index course data (first time only)
 
 Visit http://localhost:8000/admin/index and click **"Run Indexing"**
 
