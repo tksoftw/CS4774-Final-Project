@@ -146,6 +146,21 @@ The core RAG application is functional with async chat, markdown rendering, cour
 - AI/ML courses now cluster together regardless of specific content differences
 - Example: "artificial intelligence courses" returns CS 4774, CS 4750, CS 3710, etc.
 
+#### Code Reorganization
+- **Unified data sources** in `app/data/sources/`:
+  - `sis_api.py` - SIS course catalog API
+  - `hooslist_api.py` - Course descriptions and prerequisites
+  - `tcf_scraper.py` - TheCourseForum instructor reviews
+- **Data stores** in `app/data/stores/`:
+  - `rmp_store.py` - RateMyProfessor reviews JSONL storage
+- **Document building** in `app/data/document_builder.py`:
+  - Unified document creation with weighted fields
+  - Review matching to course instructors
+- **Course indexing** in `app/data/indexer.py`:
+  - Orchestrates all data fetching and vector indexing
+  - Clean separation of concerns
+- **Backwards compatibility** maintained for old imports (with deprecation warnings)
+
 #### Indexing Improvements
 - Added progress indicators for SIS fetching
 - Added progress indicators for HoosList fetching
@@ -165,7 +180,7 @@ The core RAG application is functional with async chat, markdown rendering, cour
 |--------|-------|
 | Indexed Courses | 143 unique courses |
 | Indexed Sections | 822 sections |
-| Subjects Covered | CS, DSA, STAT, MATH, STS |
+| Subjects Covered | CS, DS, STAT, MATH, STS |
 | Course Clusters | 9 clusters (AI/ML, Core CS, Security, etc.) |
 | Avg Query Time | 2-4 seconds |
 | Vector Dimensions | 3072 |

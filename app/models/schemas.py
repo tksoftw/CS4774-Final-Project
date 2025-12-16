@@ -62,7 +62,7 @@ class CourseSearchRequest(BaseModel):
     
     subject: Optional[str] = Field(None, description="Subject filter")
     keyword: Optional[str] = Field(None, description="Keyword search")
-    term: str = Field(default="1252", description="Term code (e.g., 1252 for Spring 2025)")
+    term: str = Field(default="1262", description="Term code (e.g., 1262 for Spring 2025)")
 
 
 class ScheduleItem(BaseModel):

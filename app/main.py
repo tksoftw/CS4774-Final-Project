@@ -10,7 +10,7 @@ from pathlib import Path
 from app.services import RAGEngine
 from app.config import get_settings
 from app.routers import chat_router, courses_router, schedule_router
-from app.data.course_loader import CourseLoader
+from app.data.indexer import CourseIndexer
 
 
 settings = get_settings()
@@ -24,8 +24,8 @@ async def lifespan(app: FastAPI):
     
     # Check if we have indexed data
     try:
-        loader = CourseLoader()
-        status = loader.get_status()
+        indexer = CourseIndexer()
+        status = indexer.get_status()
         print(f"Indexed courses: {status['indexed_count']}")
     except Exception as e:
         print(f"Could not check index status: {e}")
@@ -87,8 +87,8 @@ async def admin_index(request: Request):
 async def run_indexing(request: Request):
     """Run course indexing from SIS API."""
     try:
-        loader = CourseLoader()
-        count = loader.load_courses(term="1252", force_refresh=True)
+        indexer = CourseIndexer()
+        count = indexer.index_courses(term="1262", force_refresh=True)
         
         return templates.TemplateResponse(
             "admin_index.html",

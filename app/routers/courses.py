@@ -4,7 +4,7 @@ from fastapi import APIRouter, Request, Form, Query
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from app.config import get_settings
-from app.services.sis_service import SISService
+from app.data.sources import SISApi
 
 router = APIRouter(prefix="/courses", tags=["courses"])
 settings = get_settings()
@@ -17,7 +17,7 @@ async def courses_page(
     request: Request,
     subject: str = Query(default=""),
     keyword: str = Query(default=""),
-    term: str = Query(default="1252"),
+    term: str = Query(default="1262"),
     page: int = Query(default=1),
 ):
     """Render the course browser page."""
@@ -28,8 +28,8 @@ async def courses_page(
     # Only search if we have some filter
     if subject or keyword:
         try:
-            sis_service = SISService()
-            response = sis_service.search_courses_sync(
+            sis_api = SISApi()
+            response = sis_api.search(
                 subject=subject if subject else None,
                 keyword=keyword if keyword else None,
                 term=term,
@@ -37,7 +37,7 @@ async def courses_page(
             )
             
             # Handle both list and dict response formats
-            courses = sis_service._get_classes_list(response)
+            courses = sis_api.get_classes_list(response)
             total_count = len(courses)
             
         except Exception as e:
@@ -64,7 +64,7 @@ async def courses_page(
 async def search_courses(
     subject: str = Form(default=""),
     keyword: str = Form(default=""),
-    term: str = Form(default="1252"),
+    term: str = Form(default="1262"),
 ):
     """Handle course search form submission."""
     params = []
@@ -87,7 +87,7 @@ def get_common_subjects() -> list[dict]:
     """Get list of common subject codes."""
     return [
         {"code": "CS", "name": "Computer Science"},
-        {"code": "DSA", "name": "Data Science"},
+        {"code": "DS", "name": "Data Science"},
         {"code": "MATH", "name": "Mathematics"},
         {"code": "STAT", "name": "Statistics"},
         {"code": "STS", "name": "Science, Technology & Society"},
