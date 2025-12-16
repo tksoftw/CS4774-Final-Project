@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 
 BASE_URL = "https://thecourseforum.com/course"
 
-
 HEADERS = {
     "User-Agent": "UVA-Course-Advising-Project/1.0 (academic use)"
 }
@@ -34,7 +33,6 @@ def parse_instructor(li):
     rating = safe_text(li.find("p", id="rating"))
     difficulty = safe_text(li.find("p", id="difficulty"))
     gpa = safe_text(li.find("p", id="gpa"))
-    last_taught = safe_text(li.find("p", id="recency"))
 
     return {
         "instructor_name": name,
@@ -42,10 +40,26 @@ def parse_instructor(li):
         "rating": rating if rating else None,
         "difficulty": difficulty if difficulty else None,
         "gpa": gpa if gpa else None,
-        "last_taught": last_taught,
     }
 
 def scrape_course(course_url: str):
+    """Scrape course reviews from TheCourseForum.
+    
+    Automatically appends '/All' to get all historical instructor data.
+    
+    Args:
+        course_url: URL like "https://thecourseforum.com/course/CS/4774/" 
+                   or just the path portion
+    
+    Returns:
+        List of instructor review dictionaries
+    """
+    # Ensure we're using the /All endpoint
+    if not course_url.endswith('/'):
+        course_url += '/'
+    if not course_url.endswith('/All'):
+        course_url += 'All'
+    
     soup = fetch_course_page(course_url)
     instructors = []
 
@@ -55,4 +69,3 @@ def scrape_course(course_url: str):
             instructors.append(data)
 
     return instructors
-

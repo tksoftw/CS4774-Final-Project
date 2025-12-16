@@ -282,11 +282,46 @@ class CourseLoader:
             hooslist_info = hooslist_descriptions.get(desc_key, {})
             
             # Get TCF reviews for this course
-            reviews = tcf_reviews.get(desc_key, [])
+            all_reviews = tcf_reviews.get(desc_key, [])
+            
+            # Filter reviews to only include instructors teaching this specific section
+            section_instructors = course.get("instructors", [])
+            section_instructor_names = set()
+            
+            for inst in section_instructors:
+                name = inst.get("name", "").strip()
+                if name:
+                    # Store both original and normalized versions for better matching
+                    section_instructor_names.add(name.lower())
+                    # Also try last name only for partial matches
+                    parts = name.split()
+                    if len(parts) >= 2:
+                        section_instructor_names.add(parts[-1].lower())
+            
+            # Match reviews to section instructors
+            matched_reviews = []
+            for review in all_reviews:
+                review_instructor = review.get("instructor_name", "").strip()
+                if not review_instructor:
+                    continue
+                    
+                review_lower = review_instructor.lower()
+                
+                # Try exact match first
+                if review_lower in section_instructor_names:
+                    matched_reviews.append(review)
+                    continue
+                
+                # Try last name match
+                review_parts = review_instructor.split()
+                if len(review_parts) >= 2:
+                    review_last = review_parts[-1].lower()
+                    if review_last in section_instructor_names:
+                        matched_reviews.append(review)
             
             # Create document text - use SIS service method and append reviews
             base_doc = self.sis_service.get_course_document(course, hooslist_info)
-            doc_text = self._append_reviews_to_document(base_doc, reviews)
+            doc_text = self._append_reviews_to_document(base_doc, matched_reviews)
             
             # Create metadata
             metadata = {
@@ -296,8 +331,8 @@ class CourseLoader:
                 "class_number": str(course.get("class_nbr", "")),
                 "has_description": bool(hooslist_info.get("description")),
                 "has_prerequisites": bool(hooslist_info.get("prerequisites")),
-                "has_reviews": len(reviews) > 0,
-                "review_count": len(reviews),
+                "has_reviews": len(matched_reviews) > 0,
+                "review_count": len(matched_reviews),
             }
             
             documents.append(doc_text)
@@ -359,26 +394,29 @@ class CourseLoader:
             Document with reviews appended
         """
         if not reviews:
-            return base_doc
+            return base_doc + "\n\nReviews: No review data available on TheCourseForum."
         
         review_parts = [f"\n\nReviews ({len(reviews)} instructors):"]
         
         for review in reviews:
             instructor = review.get("instructor_name", "Unknown")
-            rating = review.get("rating", "—")
-            difficulty = review.get("difficulty", "—")
-            gpa = review.get("gpa", "—")
-            last_taught = review.get("last_taught", "")
+            rating = review.get("rating")
+            difficulty = review.get("difficulty")
+            gpa = review.get("gpa")
             
             review_text = f"  {instructor}"
+            
+            # Only add metrics if they exist and aren't "—"
             if rating and rating != "—":
                 review_text += f" | Rating: {rating}/5"
             if difficulty and difficulty != "—":
                 review_text += f" | Difficulty: {difficulty}/5"
             if gpa and gpa != "—":
                 review_text += f" | Avg GPA: {gpa}"
-            if last_taught:
-                review_text += f" | Last taught: {last_taught}"
+            
+            # If no metrics were added, note that
+            if review_text == f"  {instructor}":
+                review_text += " | No ratings available"
             
             review_parts.append(review_text)
         
