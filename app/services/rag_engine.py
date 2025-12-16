@@ -3,12 +3,13 @@
 from typing import Optional
 from app.services.gemini_service import GeminiService
 from app.data.vector_store import VectorStore
+from app.config import get_cluster_summary
 
 
 class RAGEngine:
     """RAG engine for course-aware AI responses."""
     
-    SYSTEM_PROMPT = """You are an AI academic advisor for University of Virginia (UVA) students. 
+    SYSTEM_PROMPT_BASE = """You are an AI academic advisor for University of Virginia (UVA) students. 
 Your role is to help students with course planning, scheduling, and academic advice.
 
 Guidelines:
@@ -66,7 +67,18 @@ When discussing specific course(s), format the following details like so:
 
 When discussing general course information (e.g. "What are some good courses to take?"), limit relevant details to:
 - Course title ONLY
+
+{cluster_info}
 """
+    
+    def __init__(self):
+        self.gemini_service = GeminiService()
+        self.vector_store = VectorStore()
+        self.conversation_history: dict[str, list[dict]] = {}
+        # Build the full system prompt with cluster info
+        self.SYSTEM_PROMPT = self.SYSTEM_PROMPT_BASE.format(
+            cluster_info=get_cluster_summary()
+        )
 
     QUERY_PROMPT_TEMPLATE = """Use the following course information to answer the student's question.
 
@@ -78,11 +90,6 @@ STUDENT QUESTION:
 
 Provide a helpful, accurate response based on the course information above. If the information provided doesn't fully answer the question, acknowledge what you know and what you don't.
 """
-
-    def __init__(self):
-        self.gemini_service = GeminiService()
-        self.vector_store = VectorStore()
-        self.conversation_history: dict[str, list[dict]] = {}
     
     def query(
         self,

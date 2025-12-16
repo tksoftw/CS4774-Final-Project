@@ -11,6 +11,134 @@ A Retrieval-Augmented Generation (RAG) application that consolidates UVA course 
 
 ---
 
+## 🚀 Getting Started
+
+### 1. Setup
+
+```bash
+# Clone the repository
+git clone <repo-url>
+cd CS4774-Final-Project
+
+# Create virtual environment
+python -m venv venv
+
+# Activate virtual environment
+# Windows:
+.\venv\Scripts\activate
+# macOS/Linux:
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Copy environment template and add your API key
+cp env.example .env
+# Edit .env and add your GEMINI_API_KEY
+```
+
+### 2. Environment Variables
+
+Create a `.env` file with:
+
+```env
+GEMINI_API_KEY=your-gemini-api-key-here
+DEBUG=true
+APP_TITLE=UVA AI Course Assistant
+CHROMA_PERSIST_DIR=./data/chroma
+```
+
+Get a Gemini API key from: https://aistudio.google.com/apikey
+
+### 3. Index Courses
+
+Before using the chat, you need to populate the vector database with course data:
+
+**Option A: Via Admin UI**
+```bash
+# Start the server first
+.\venv\Scripts\python.exe -m uvicorn app.main:app --reload
+
+# Then visit http://localhost:8000/admin/index and click "Run Indexing"
+```
+
+**Option B: Via Python Script**
+```python
+from app.data.indexer import CourseIndexer
+
+indexer = CourseIndexer()
+
+# Index default subjects (CS, DS, STAT, MATH, STS)
+indexer.index_courses(term="1262")
+
+# Or specify subjects
+indexer.index_courses(term="1262", subjects=["CS", "ECE"])
+
+# Force refresh from APIs (ignore cache)
+indexer.index_courses(term="1262", force_refresh=True)
+```
+
+**Option C: One-liner**
+```bash
+.\venv\Scripts\python.exe -c "from app.data.indexer import CourseIndexer; CourseIndexer().index_courses()"
+```
+
+The indexing process:
+1. Fetches courses from SIS API (or cache)
+2. Fetches descriptions/prerequisites from Hooslist
+3. Fetches instructor reviews from TheCourseForum
+4. Builds weighted documents for each section
+5. Embeds and stores in ChromaDB vector database
+
+**Expected output:**
+```
+==================================================
+FETCHING COURSES FROM SIS API
+==================================================
+[1/5] Fetching CS... 245 sections (2.1s)
+[2/5] Fetching DS... 12 sections (0.5s)
+...
+
+==================================================
+INDEXING INTO VECTOR DATABASE
+==================================================
+Indexing 500 documents (10 batches):
+  Batch 1/10 [ 10.0%] - 50/500 docs... Done (2.3s) | ETA: 21s
+...
+
+==================================================
+INDEXING COMPLETE!
+  - Indexed: 500 documents
+  - Time: 45.2 seconds
+==================================================
+```
+
+### 4. Run the Server
+
+```bash
+# Development mode with auto-reload
+.\venv\Scripts\python.exe -m uvicorn app.main:app --reload
+
+# Production mode
+.\venv\Scripts\python.exe -m uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
+Visit http://localhost:8000 to use the AI Course Assistant.
+
+### 5. Data Storage
+
+| Location | Contents |
+|----------|----------|
+| `data/chroma/` | ChromaDB vector database (embeddings) |
+| `data/courses/` | Cached SIS API responses (JSON) |
+| `data/cache/` | Cached Hooslist/TCF data (JSONL) |
+
+To re-index, either:
+- Use `force_refresh=True` to re-fetch from APIs
+- Delete `data/` folder and re-run indexing
+
+---
+
 ## 🏗️ Architecture
 
 ```
@@ -271,6 +399,9 @@ DEBUG=true
 
 ## 📝 Notes
 
+- **Indexing**: Run once before using chat; data is cached locally
+- **Caching**: SIS responses cached in `data/courses/`, Hooslist/TCF in `data/cache/`
+- **Re-indexing**: Use `force_refresh=True` or delete cache files
 - Chat uses async fetch with loading animation (simpler than SSE)
 - Markdown rendered server-side via mistune library
 - Hybrid search combines exact course matching with semantic search

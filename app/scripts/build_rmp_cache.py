@@ -6,7 +6,7 @@ Safe to run multiple times (resumes from progress file).
 """
 
 import time
-from app.services.ratemyprof_service import RateMyProfessorService
+from app.data.sources import RMPApi
 
 
 def main():
@@ -22,18 +22,18 @@ def main():
     print(f"Batch size: {BATCH_SIZE}, Rating pages: {MAX_PAGES}")
     print("This will stop automatically when finished.\n")
 
-    service = RateMyProfessorService(
+    rmp = RMPApi(
         school_id=SCHOOL_ID,
         testing=TESTING,
     )
 
     # total professors (uses the already-working professor list)
-    total_profs = len(service.api.professors)
+    total_profs = len(rmp.api.professors)
 
     try:
         while True:
             # read processed count before
-            progress_path = service._progress_path(MAX_PAGES)  # internal helper (fine for script)
+            progress_path = rmp._cache_path("progress", MAX_PAGES)
             before_processed = 0
             try:
                 with open(progress_path, "r", encoding="utf-8") as f:
@@ -42,7 +42,7 @@ def main():
                 before_processed = 0
 
             # Do one incremental batch
-            course_map = service.get_courses_with_professors(
+            course_map = rmp.build_course_professor_map(
                 max_pages=MAX_PAGES,
                 batch_size=BATCH_SIZE,
             )
