@@ -72,10 +72,10 @@ async def send_message(
     try:
         logger.info(f"[CHAT] Received message: {message}")
         
-        # Get RAG response
+        # Get RAG response with session memory
         rag_engine = RAGEngine()
         logger.info("[CHAT] Calling RAG query...")
-        result = rag_engine.query(message)
+        result = rag_engine.query(message, session_id=session_id)
         logger.info(f"[CHAT] Got result with {result.get('context_used', 0)} context docs")
         
         response_text = result["response"]
@@ -108,8 +108,13 @@ async def send_message(
 @router.post("/clear", response_class=HTMLResponse)
 async def clear_chat(session_id: str = Form(...)):
     """Clear chat history for a session."""
+    # Clear local message storage
     if session_id in chat_sessions:
         del chat_sessions[session_id]
+    
+    # Clear Gemini conversation memory
+    rag_engine = RAGEngine()
+    rag_engine.clear_session(session_id)
     
     return RedirectResponse(
         url=f"/chat?session_id={session_id}",
@@ -130,7 +135,7 @@ async def api_send_message(
     
     try:
         rag_engine = RAGEngine()
-        result = rag_engine.query(message)
+        result = rag_engine.query(message, session_id=session_id)
         response_text = result["response"]
     except Exception as e:
         response_text = f"Error: {str(e)}"

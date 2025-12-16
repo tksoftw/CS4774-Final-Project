@@ -5,7 +5,7 @@ unified text documents for vector embedding and retrieval.
 """
 
 from typing import Optional
-from app.config import get_settings, get_course_clusters, get_cluster_description
+from app.config import get_settings, get_course_clusters, get_cluster_description, CLUSTER_WEIGHTS
 from app.data.sources.sis_api import SISApi
 from app.data.stores.rmp_reviews_loader import get_rmp_loader
 
@@ -73,13 +73,16 @@ class DocumentBuilder:
             prereq_line = f"Prerequisites: {prerequisites}"
             parts.extend([prereq_line] * prereq_w)
         
-        # Course Clusters (weight controlled)
+        # Course Clusters (weight controlled + per-cluster weights)
         course_code = f"{subject} {catalog_nbr}"
         clusters = get_course_clusters(course_code)
         if clusters:
-            for _ in range(cluster_w):
-                for cluster in clusters:
-                    desc = get_cluster_description(cluster)
+            for cluster in clusters:
+                desc = get_cluster_description(cluster)
+                # Apply both base cluster weight AND per-cluster weight multiplier
+                cluster_multiplier = CLUSTER_WEIGHTS.get(cluster, 1)
+                total_weight = cluster_w * cluster_multiplier
+                for _ in range(total_weight):
                     parts.append(f"Cluster: {cluster} - {desc}")
         
         # Credits (not weighted)

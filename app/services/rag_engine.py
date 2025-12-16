@@ -21,8 +21,14 @@ Guidelines:
 - Suggest courses based on student interests and requirements
 - Try to use markdown formatting to make the response more readable and visually appealing.
 - Courses may include lab/discussion sections which will be listed as 0 credits
+- Try to limit your responses to a length of around 1-2 paragraphs.
 
-When discussing specific course(s), format the following details like so:
+When discussing a VERY specific question about a specific course, answer the question briefly and to the point.
+ - For example, if the question is "Who teaches Discrete Math 1?", an appropriate response would be "Discrete Math 1 (CS 2120) is taught by [Name(s)]. <END RESPONSE>"
+
+When asking a general question about courses, answer the question with all known information.
+
+When discussing specific course(s) in all other scenarios, format the following details like so:
 ### Course Number: Course Title
 - **Credits:**
 - **Course Description:**
@@ -61,9 +67,11 @@ When discussing specific course(s), format the following details like so:
 - C+: [percentage] | C: [percentage] | C-: [percentage]
 - D/F/W: [percentage]
 
-- Do NOT list **Lab/Discussion Sections:** if there are none
+- Do NOT list **Lab/Discussion Sections:** if there are none (lab sections are 0 credits)
 - If an instructor is missing data from reviews, state this clearly
 - Do NOT include course information about prerequisites unless explicitly prompted to
+- Do NOT say "Based on the information provided" at the beginning of the response.
+- DO NOT mention "Clusters" in the response.
 
 When discussing general course information (e.g. "What are some good courses to take?"), limit relevant details to:
 - Course title ONLY
@@ -80,28 +88,28 @@ When discussing general course information (e.g. "What are some good courses to 
             cluster_info=get_cluster_summary()
         )
 
-    QUERY_PROMPT_TEMPLATE = """Use the following course information to answer the student's question.
+    QUERY_PROMPT_TEMPLATE = """Use the following information to answer the student's question.
 
-RELEVANT COURSE INFORMATION:
+RELEVANT COURSE INFORMATION (from catalog):
 {context}
 
 STUDENT QUESTION:
 {question}
 
-Provide a helpful, accurate response based on the course information above. If the information provided doesn't fully answer the question, acknowledge what you know and what you don't.
+Provide a helpful, accurate response. For specific course details (instructors, times, descriptions), use the RELEVANT COURSE INFORMATION.
 """
     
     def query(
         self,
         question: str,
-        conversation_id: Optional[str] = None,
-        n_results: int = 10,  # Increased from 5 to 10 for better recall
+        session_id: Optional[str] = None,
+        n_results: int = 15,  # Increased from 5 to 10 for better recall
     ) -> dict:
         """Process a user query with RAG.
         
         Args:
             question: User's question
-            conversation_id: Optional ID for conversation context
+            session_id: Optional session ID for conversation memory
             n_results: Number of documents to retrieve
             
         Returns:
@@ -125,25 +133,47 @@ Provide a helpful, accurate response based on the course information above. If t
                     sources.append(source_str)
         
         context = "\n\n".join(context_parts) if context_parts else "No specific course information found."
-        # Build the prompt
+        # Build the prompt with context + degree requirements
         user_prompt = self.QUERY_PROMPT_TEMPLATE.format(
             context=context,
             question=question,
         )
         
-        # Get response from Gemini
-        response = self.gemini_service.get_completion(
-            prompt=user_prompt,
-            system_prompt=self.SYSTEM_PROMPT,
-            temperature=0.7,
-            max_tokens=1000,
-        )
+        # Get response from Gemini (with or without memory)
+        if session_id:
+            # Use chat with memory
+            response = self.gemini_service.get_chat_completion(
+                prompt=user_prompt,
+                session_id=session_id,
+                system_prompt=self.SYSTEM_PROMPT,
+                temperature=0.7,
+                max_tokens=1000,
+            )
+        else:
+            # Stateless query
+            response = self.gemini_service.get_completion(
+                prompt=user_prompt,
+                system_prompt=self.SYSTEM_PROMPT,
+                temperature=0.7,
+                max_tokens=1000,
+            )
         
         return {
             "response": response,
             "sources": sources,
             "context_used": len(context_parts),
         }
+    
+    def clear_session(self, session_id: str) -> bool:
+        """Clear a conversation session's memory.
+        
+        Args:
+            session_id: Session ID to clear
+            
+        Returns:
+            True if cleared, False if didn't exist
+        """
+        return self.gemini_service.clear_chat_session(session_id)
     
     def query_stream(
         self,
