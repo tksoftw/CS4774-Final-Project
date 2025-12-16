@@ -2,7 +2,7 @@
 
 import json
 import time
-from .tcf_review_scraper import scrape_all_course_reviews
+from ..app.data.sources.tcf_review_scraper import scrape_all_course_reviews
 from app.data.stores.tcf_instructor_reviews_store import TCFInstructorReviewsStore
 
 def parse_course_id_from_url(profile_url: str) -> int:
