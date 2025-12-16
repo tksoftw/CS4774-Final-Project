@@ -4,3 +4,4 @@ venv/
 tests/
 data/chroma/
 data/courses/
+.DS_Store
