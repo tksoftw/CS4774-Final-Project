@@ -23758,5 +23758,1568 @@
       "difficulty": "—",
       "gpa": "—"
     }
+  ],
+  "DS_1001": [
+    {
+      "instructor_name": "Brian Wright",
+      "profile_url": "https://thecourseforum.com/course/15229/8077/",
+      "rating": "3.33",
+      "difficulty": "2.50",
+      "gpa": "3.88"
+    },
+    {
+      "instructor_name": "To Announced",
+      "profile_url": "https://thecourseforum.com/course/15229/12448/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Ali Rivera",
+      "profile_url": "https://thecourseforum.com/course/15229/13216/",
+      "rating": "4.33",
+      "difficulty": "2.00",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Natalie Kupperman",
+      "profile_url": "https://thecourseforum.com/course/15229/7943/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Loreto Alonzi",
+      "profile_url": "https://thecourseforum.com/course/15229/8394/",
+      "rating": "3.78",
+      "difficulty": "1.50",
+      "gpa": "—"
+    }
+  ],
+  "DS_1002": [
+    {
+      "instructor_name": "Mai Dahshan",
+      "profile_url": "https://thecourseforum.com/course/15312/13668/",
+      "rating": "4.17",
+      "difficulty": "2.50",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Jianxin Xie",
+      "profile_url": "https://thecourseforum.com/course/15312/13218/",
+      "rating": "4.00",
+      "difficulty": "1.00",
+      "gpa": "3.95"
+    },
+    {
+      "instructor_name": "Ali Rivera",
+      "profile_url": "https://thecourseforum.com/course/15312/13216/",
+      "rating": "4.67",
+      "difficulty": "1.00",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Javier Rasero",
+      "profile_url": "https://thecourseforum.com/course/15312/13550/",
+      "rating": "3.78",
+      "difficulty": "1.67",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Aaron Abrams",
+      "profile_url": "https://thecourseforum.com/course/15312/13217/",
+      "rating": "3.00",
+      "difficulty": "1.00",
+      "gpa": "3.64"
+    },
+    {
+      "instructor_name": "Gianluca Guadagni",
+      "profile_url": "https://thecourseforum.com/course/15312/96/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "3.90"
+    },
+    {
+      "instructor_name": "To Announced",
+      "profile_url": "https://thecourseforum.com/course/15312/12448/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Natalie Kupperman",
+      "profile_url": "https://thecourseforum.com/course/15312/7943/",
+      "rating": "5.00",
+      "difficulty": "2.00",
+      "gpa": "3.96"
+    }
+  ],
+  "DS_2002": [
+    {
+      "instructor_name": "Jason Williamson",
+      "profile_url": "https://thecourseforum.com/course/15313/4081/",
+      "rating": "2.33",
+      "difficulty": "2.00",
+      "gpa": "3.93"
+    },
+    {
+      "instructor_name": "Karsten Siller",
+      "profile_url": "https://thecourseforum.com/course/15313/4689/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Jon Tupitza",
+      "profile_url": "https://thecourseforum.com/course/15313/12483/",
+      "rating": "1.00",
+      "difficulty": "3.00",
+      "gpa": "3.89"
+    },
+    {
+      "instructor_name": "Austin Rivera",
+      "profile_url": "https://thecourseforum.com/course/15313/13970/",
+      "rating": "1.67",
+      "difficulty": "4.00",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Neal Magee",
+      "profile_url": "https://thecourseforum.com/course/15313/11446/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "3.94"
+    }
+  ],
+  "DS_2003": [
+    {
+      "instructor_name": "Nur Yildirim",
+      "profile_url": "https://thecourseforum.com/course/15314/13669/",
+      "rating": "1.33",
+      "difficulty": "2.00",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Hannah Bako",
+      "profile_url": "https://thecourseforum.com/course/15314/14045/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Brian Wright",
+      "profile_url": "https://thecourseforum.com/course/15314/8077/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Antonios Mamalakis",
+      "profile_url": "https://thecourseforum.com/course/15314/13223/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Farhana Faruqe",
+      "profile_url": "https://thecourseforum.com/course/15314/13220/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "3.89"
+    },
+    {
+      "instructor_name": "Prince Afriyie",
+      "profile_url": "https://thecourseforum.com/course/15314/8380/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "3.90"
+    },
+    {
+      "instructor_name": "Natalie Kupperman",
+      "profile_url": "https://thecourseforum.com/course/15314/7943/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "3.85"
+    },
+    {
+      "instructor_name": "Aaron Abrams",
+      "profile_url": "https://thecourseforum.com/course/15314/13217/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "3.99"
+    },
+    {
+      "instructor_name": "To Announced",
+      "profile_url": "https://thecourseforum.com/course/15314/12448/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Bruce Corliss",
+      "profile_url": "https://thecourseforum.com/course/15314/12629/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "3.75"
+    }
+  ],
+  "DS_2004": [
+    {
+      "instructor_name": "To Announced",
+      "profile_url": "https://thecourseforum.com/course/15315/12448/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Emanuel Moss",
+      "profile_url": "https://thecourseforum.com/course/15315/14046/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Jess Reia",
+      "profile_url": "https://thecourseforum.com/course/15315/12630/",
+      "rating": "4.00",
+      "difficulty": "2.00",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Mona Sloane",
+      "profile_url": "https://thecourseforum.com/course/15315/13219/",
+      "rating": "1.08",
+      "difficulty": "2.50",
+      "gpa": "3.64"
+    },
+    {
+      "instructor_name": "Farhana Faruqe",
+      "profile_url": "https://thecourseforum.com/course/15315/13220/",
+      "rating": "2.83",
+      "difficulty": "2.00",
+      "gpa": "3.85"
+    },
+    {
+      "instructor_name": "Aaron Martin",
+      "profile_url": "https://thecourseforum.com/course/15315/13551/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "3.88"
+    }
+  ],
+  "DS_2024": [
+    {
+      "instructor_name": "Aaron Martin",
+      "profile_url": "https://thecourseforum.com/course/16077/13551/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Mona Sloane",
+      "profile_url": "https://thecourseforum.com/course/16077/13219/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
+  ],
+  "DS_3001": [
+    {
+      "instructor_name": "Terence Johnson",
+      "profile_url": "https://thecourseforum.com/course/14618/11449/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "3.96"
+    },
+    {
+      "instructor_name": "To Announced",
+      "profile_url": "https://thecourseforum.com/course/14618/12448/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Ethan Nelson",
+      "profile_url": "https://thecourseforum.com/course/14618/14047/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Michael Freenor",
+      "profile_url": "https://thecourseforum.com/course/14618/7289/",
+      "rating": "3.83",
+      "difficulty": "4.00",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Brian Wright",
+      "profile_url": "https://thecourseforum.com/course/14618/8077/",
+      "rating": "4.17",
+      "difficulty": "2.50",
+      "gpa": "3.90"
+    },
+    {
+      "instructor_name": "Adam Tashman",
+      "profile_url": "https://thecourseforum.com/course/14618/11845/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
+  ],
+  "DS_3021": [
+    {
+      "instructor_name": "Brian Wright",
+      "profile_url": "https://thecourseforum.com/course/15909/8077/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Terence Johnson",
+      "profile_url": "https://thecourseforum.com/course/15909/11449/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Navya Annapareddy",
+      "profile_url": "https://thecourseforum.com/course/15909/13670/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
+  ],
+  "DS_3025": [
+    {
+      "instructor_name": "Gianluca Guadagni",
+      "profile_url": "https://thecourseforum.com/course/15910/96/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Aaron Abrams",
+      "profile_url": "https://thecourseforum.com/course/15910/13217/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
+  ],
+  "DS_3026": [
+    {
+      "instructor_name": "Prince Afriyie",
+      "profile_url": "https://thecourseforum.com/course/16229/8380/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
+  ],
+  "DS_4002": [
+    {
+      "instructor_name": "Karsten Siller",
+      "profile_url": "https://thecourseforum.com/course/14582/4689/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Javier Rasero",
+      "profile_url": "https://thecourseforum.com/course/14582/13550/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Loreto Alonzi",
+      "profile_url": "https://thecourseforum.com/course/14582/8394/",
+      "rating": "5.00",
+      "difficulty": "3.00",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "To Announced",
+      "profile_url": "https://thecourseforum.com/course/14582/12448/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Harsh Anand",
+      "profile_url": "https://thecourseforum.com/course/14582/13552/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Brian Wright",
+      "profile_url": "https://thecourseforum.com/course/14582/8077/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "3.90"
+    },
+    {
+      "instructor_name": "Eric Tassone",
+      "profile_url": "https://thecourseforum.com/course/14582/10317/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "4.00"
+    },
+    {
+      "instructor_name": "Faculty Staff",
+      "profile_url": "https://thecourseforum.com/course/14582/6002/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
+  ],
+  "DS_4023": [
+    {
+      "instructor_name": "Mai Dahshan",
+      "profile_url": "https://thecourseforum.com/course/16230/13668/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
+  ],
+  "DS_4024": [
+    {
+      "instructor_name": "Farhana Faruqe",
+      "profile_url": "https://thecourseforum.com/course/16231/13220/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Chirag Agarwal",
+      "profile_url": "https://thecourseforum.com/course/16231/13671/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
+  ],
+  "DS_4125": [
+    {
+      "instructor_name": "Jianxin Xie",
+      "profile_url": "https://thecourseforum.com/course/16232/13218/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
+  ],
+  "DS_4320": [
+    {
+      "instructor_name": "Loreto Alonzi",
+      "profile_url": "https://thecourseforum.com/course/16233/8394/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
+  ],
+  "DS_4993": [
+    {
+      "instructor_name": "Ken Ono",
+      "profile_url": "https://thecourseforum.com/course/15171/8273/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Alex Gates",
+      "profile_url": "https://thecourseforum.com/course/15171/13230/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Brian Wright",
+      "profile_url": "https://thecourseforum.com/course/15171/8077/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "To Announced",
+      "profile_url": "https://thecourseforum.com/course/15171/12448/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "TBA TBA",
+      "profile_url": "https://thecourseforum.com/course/15171/7969/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Stephen Baek",
+      "profile_url": "https://thecourseforum.com/course/15171/12484/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
+  ],
+  "DS_5001": [
+    {
+      "instructor_name": "Rafael Alvarado",
+      "profile_url": "https://thecourseforum.com/course/14382/1875/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "3.68"
+    },
+    {
+      "instructor_name": "Sree Mallikarjun",
+      "profile_url": "https://thecourseforum.com/course/14382/13221/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
+  ],
+  "DS_5003": [
+    {
+      "instructor_name": "Christian Wernz",
+      "profile_url": "https://thecourseforum.com/course/16019/13939/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
+  ],
+  "DS_5007": [
+    {
+      "instructor_name": "Mar Hicks",
+      "profile_url": "https://thecourseforum.com/course/16234/13553/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
+  ],
+  "DS_5012": [
+    {
+      "instructor_name": "Yuri Malitsky",
+      "profile_url": "https://thecourseforum.com/course/16020/13502/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Judy Fox",
+      "profile_url": "https://thecourseforum.com/course/16020/12221/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
+  ],
+  "DS_5023": [],
+  "DS_5030": [
+    {
+      "instructor_name": "Jeffrey Woo",
+      "profile_url": "https://thecourseforum.com/course/16080/8384/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Terence Johnson",
+      "profile_url": "https://thecourseforum.com/course/16080/11449/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
+  ],
+  "DS_5070": [
+    {
+      "instructor_name": "Antonios Mamalakis",
+      "profile_url": "https://thecourseforum.com/course/16235/13223/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
+  ],
+  "DS_5220": [
+    {
+      "instructor_name": "Neal Magee",
+      "profile_url": "https://thecourseforum.com/course/16236/11446/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
+  ],
+  "DS_6001": [
+    {
+      "instructor_name": "Jonathan Kropko",
+      "profile_url": "https://thecourseforum.com/course/12359/4963/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "3.88"
+    },
+    {
+      "instructor_name": "Rafael Alvarado",
+      "profile_url": "https://thecourseforum.com/course/12359/1875/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "3.80"
+    },
+    {
+      "instructor_name": "Don Brown",
+      "profile_url": "https://thecourseforum.com/course/12359/8392/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Rasoul Sali",
+      "profile_url": "https://thecourseforum.com/course/12359/10377/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Donald Brown",
+      "profile_url": "https://thecourseforum.com/course/12359/2661/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "3.85"
+    }
+  ],
+  "DS_6002": [
+    {
+      "instructor_name": "Renee Cummings",
+      "profile_url": "https://thecourseforum.com/course/12360/12486/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Farhana Faruqe",
+      "profile_url": "https://thecourseforum.com/course/12360/13220/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "3.98"
+    },
+    {
+      "instructor_name": "Philip Bourne",
+      "profile_url": "https://thecourseforum.com/course/12360/7622/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "3.90"
+    },
+    {
+      "instructor_name": "Samuel Lengen",
+      "profile_url": "https://thecourseforum.com/course/12360/10378/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "3.90"
+    },
+    {
+      "instructor_name": "Ruth Bernheim",
+      "profile_url": "https://thecourseforum.com/course/12360/1421/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Deborah Johnson",
+      "profile_url": "https://thecourseforum.com/course/12360/2643/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "3.75"
+    },
+    {
+      "instructor_name": "Deborah Bernheim",
+      "profile_url": "https://thecourseforum.com/course/12360/9637/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
+  ],
+  "DS_6015": [
+    {
+      "instructor_name": "Rafael Alvarado",
+      "profile_url": "https://thecourseforum.com/course/15638/1875/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Adam Tashman",
+      "profile_url": "https://thecourseforum.com/course/15638/11845/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Philip Waggoner",
+      "profile_url": "https://thecourseforum.com/course/15638/13225/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Abbas Kazemipour",
+      "profile_url": "https://thecourseforum.com/course/15638/13503/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "William Basener",
+      "profile_url": "https://thecourseforum.com/course/15638/6594/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Natalie Kupperman",
+      "profile_url": "https://thecourseforum.com/course/15638/7943/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Heman Shakeri",
+      "profile_url": "https://thecourseforum.com/course/15638/13222/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
+  ],
+  "DS_6021": [
+    {
+      "instructor_name": "Thomas Stewart",
+      "profile_url": "https://thecourseforum.com/course/16081/13128/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Prince Afriyie",
+      "profile_url": "https://thecourseforum.com/course/16081/8380/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
+  ],
+  "DS_6030": [
+    {
+      "instructor_name": "Michael Porter",
+      "profile_url": "https://thecourseforum.com/course/15639/7899/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "3.95"
+    },
+    {
+      "instructor_name": "Peter Gedeck",
+      "profile_url": "https://thecourseforum.com/course/15639/13226/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "3.84"
+    }
+  ],
+  "DS_6050": [
+    {
+      "instructor_name": "Heman Shakeri",
+      "profile_url": "https://thecourseforum.com/course/15640/13222/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Tom Hartvigsen",
+      "profile_url": "https://thecourseforum.com/course/15640/13504/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Sodiq Adewole",
+      "profile_url": "https://thecourseforum.com/course/15640/13227/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "3.89"
+    },
+    {
+      "instructor_name": "Sheng Li",
+      "profile_url": "https://thecourseforum.com/course/15640/13228/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "3.97"
+    },
+    {
+      "instructor_name": "Sodiq Opeyemi Adewole",
+      "profile_url": "https://thecourseforum.com/course/15640/13870/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
+  ],
+  "DS_6210": [
+    {
+      "instructor_name": "Heman Shakeri",
+      "profile_url": "https://thecourseforum.com/course/15641/13222/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Stephen Baek",
+      "profile_url": "https://thecourseforum.com/course/15641/12484/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "3.63"
+    }
+  ],
+  "DS_6310": [
+    {
+      "instructor_name": "Jeffrey Blume",
+      "profile_url": "https://thecourseforum.com/course/15642/13229/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "3.83"
+    }
+  ],
+  "DS_6404": [
+    {
+      "instructor_name": "Stephen Baek",
+      "profile_url": "https://thecourseforum.com/course/16237/12484/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
+  ],
+  "DS_6410": [
+    {
+      "instructor_name": "Aiying Zhang",
+      "profile_url": "https://thecourseforum.com/course/15643/13224/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Michael Porter",
+      "profile_url": "https://thecourseforum.com/course/15643/7899/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "3.89"
+    }
+  ],
+  "DS_6700": [
+    {
+      "instructor_name": "Jess Reia",
+      "profile_url": "https://thecourseforum.com/course/15644/12630/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
+  ],
+  "DS_6993": [
+    {
+      "instructor_name": "Slava Krushkal",
+      "profile_url": "https://thecourseforum.com/course/15645/8278/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "John Horn",
+      "profile_url": "https://thecourseforum.com/course/15645/8352/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Stephen Baek",
+      "profile_url": "https://thecourseforum.com/course/15645/12484/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Thomas Stewart",
+      "profile_url": "https://thecourseforum.com/course/15645/13128/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Adam Tashman",
+      "profile_url": "https://thecourseforum.com/course/15645/11845/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Aidong Zhang",
+      "profile_url": "https://thecourseforum.com/course/15645/7917/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Yue Cheng",
+      "profile_url": "https://thecourseforum.com/course/15645/12631/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Sheng Li",
+      "profile_url": "https://thecourseforum.com/course/15645/13228/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "4.00"
+    }
+  ],
+  "DS_7600": [
+    {
+      "instructor_name": "Nur Yildirim",
+      "profile_url": "https://thecourseforum.com/course/16238/13669/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
+  ],
+  "DS_8104": [
+    {
+      "instructor_name": "Alex Gates",
+      "profile_url": "https://thecourseforum.com/course/15650/13230/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
+  ],
+  "DS_8998": [
+    {
+      "instructor_name": "Gianluca Guadagni",
+      "profile_url": "https://thecourseforum.com/course/15172/96/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Lei Li",
+      "profile_url": "https://thecourseforum.com/course/15172/348/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Rafael Alvarado",
+      "profile_url": "https://thecourseforum.com/course/15172/1875/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Peter Beling",
+      "profile_url": "https://thecourseforum.com/course/15172/2657/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Karsten Siller",
+      "profile_url": "https://thecourseforum.com/course/15172/4689/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Jonathan Kropko",
+      "profile_url": "https://thecourseforum.com/course/15172/4963/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Stephen Turner",
+      "profile_url": "https://thecourseforum.com/course/15172/6842/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Daniel Graham",
+      "profile_url": "https://thecourseforum.com/course/15172/7737/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Michael Porter",
+      "profile_url": "https://thecourseforum.com/course/15172/7899/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Natalie Kupperman",
+      "profile_url": "https://thecourseforum.com/course/15172/7943/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Brian Wright",
+      "profile_url": "https://thecourseforum.com/course/15172/8077/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "John Horn",
+      "profile_url": "https://thecourseforum.com/course/15172/8352/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Prince Afriyie",
+      "profile_url": "https://thecourseforum.com/course/15172/8380/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Don Brown",
+      "profile_url": "https://thecourseforum.com/course/15172/8392/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Loreto Alonzi",
+      "profile_url": "https://thecourseforum.com/course/15172/8394/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Neal Magee",
+      "profile_url": "https://thecourseforum.com/course/15172/11446/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Terence Johnson",
+      "profile_url": "https://thecourseforum.com/course/15172/11449/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Adam Tashman",
+      "profile_url": "https://thecourseforum.com/course/15172/11845/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Teague Henry",
+      "profile_url": "https://thecourseforum.com/course/15172/11978/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Judy Fox",
+      "profile_url": "https://thecourseforum.com/course/15172/12221/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Stephen Baek",
+      "profile_url": "https://thecourseforum.com/course/15172/12484/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Jess Reia",
+      "profile_url": "https://thecourseforum.com/course/15172/12630/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Paul Perrin",
+      "profile_url": "https://thecourseforum.com/course/15172/12746/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Thomas Stewart",
+      "profile_url": "https://thecourseforum.com/course/15172/13128/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Aaron Abrams",
+      "profile_url": "https://thecourseforum.com/course/15172/13217/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Jianxin Xie",
+      "profile_url": "https://thecourseforum.com/course/15172/13218/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Mona Sloane",
+      "profile_url": "https://thecourseforum.com/course/15172/13219/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Farhana Faruqe",
+      "profile_url": "https://thecourseforum.com/course/15172/13220/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Heman Shakeri",
+      "profile_url": "https://thecourseforum.com/course/15172/13222/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Aiying Zhang",
+      "profile_url": "https://thecourseforum.com/course/15172/13224/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Sheng Li",
+      "profile_url": "https://thecourseforum.com/course/15172/13228/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Jeffrey Blume",
+      "profile_url": "https://thecourseforum.com/course/15172/13229/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Alex Gates",
+      "profile_url": "https://thecourseforum.com/course/15172/13230/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Tom Hartvigsen",
+      "profile_url": "https://thecourseforum.com/course/15172/13504/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Javier Rasero",
+      "profile_url": "https://thecourseforum.com/course/15172/13550/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Mar Hicks",
+      "profile_url": "https://thecourseforum.com/course/15172/13553/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Mai Dahshan",
+      "profile_url": "https://thecourseforum.com/course/15172/13668/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Nur Yildirim",
+      "profile_url": "https://thecourseforum.com/course/15172/13669/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Chirag Agarwal",
+      "profile_url": "https://thecourseforum.com/course/15172/13671/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Hannah Bako",
+      "profile_url": "https://thecourseforum.com/course/15172/14045/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "YY Ahn",
+      "profile_url": "https://thecourseforum.com/course/15172/14048/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Jordan Bryan",
+      "profile_url": "https://thecourseforum.com/course/15172/14049/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Tyler Cody",
+      "profile_url": "https://thecourseforum.com/course/15172/14050/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "William Basener",
+      "profile_url": "https://thecourseforum.com/course/15172/6594/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "John Van Horn",
+      "profile_url": "https://thecourseforum.com/course/15172/13871/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
+  ],
+  "DS_9999": [
+    {
+      "instructor_name": "Gianluca Guadagni",
+      "profile_url": "https://thecourseforum.com/course/15651/96/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Lei Li",
+      "profile_url": "https://thecourseforum.com/course/15651/348/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Rafael Alvarado",
+      "profile_url": "https://thecourseforum.com/course/15651/1875/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Peter Beling",
+      "profile_url": "https://thecourseforum.com/course/15651/2657/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Karsten Siller",
+      "profile_url": "https://thecourseforum.com/course/15651/4689/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Jonathan Kropko",
+      "profile_url": "https://thecourseforum.com/course/15651/4963/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Stephen Turner",
+      "profile_url": "https://thecourseforum.com/course/15651/6842/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Daniel Graham",
+      "profile_url": "https://thecourseforum.com/course/15651/7737/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Michael Porter",
+      "profile_url": "https://thecourseforum.com/course/15651/7899/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Natalie Kupperman",
+      "profile_url": "https://thecourseforum.com/course/15651/7943/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Brian Wright",
+      "profile_url": "https://thecourseforum.com/course/15651/8077/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "John Horn",
+      "profile_url": "https://thecourseforum.com/course/15651/8352/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Prince Afriyie",
+      "profile_url": "https://thecourseforum.com/course/15651/8380/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Don Brown",
+      "profile_url": "https://thecourseforum.com/course/15651/8392/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Loreto Alonzi",
+      "profile_url": "https://thecourseforum.com/course/15651/8394/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Neal Magee",
+      "profile_url": "https://thecourseforum.com/course/15651/11446/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Terence Johnson",
+      "profile_url": "https://thecourseforum.com/course/15651/11449/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Adam Tashman",
+      "profile_url": "https://thecourseforum.com/course/15651/11845/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Teague Henry",
+      "profile_url": "https://thecourseforum.com/course/15651/11978/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Judy Fox",
+      "profile_url": "https://thecourseforum.com/course/15651/12221/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Stephen Baek",
+      "profile_url": "https://thecourseforum.com/course/15651/12484/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Jess Reia",
+      "profile_url": "https://thecourseforum.com/course/15651/12630/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Paul Perrin",
+      "profile_url": "https://thecourseforum.com/course/15651/12746/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Thomas Stewart",
+      "profile_url": "https://thecourseforum.com/course/15651/13128/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Aaron Abrams",
+      "profile_url": "https://thecourseforum.com/course/15651/13217/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Jianxin Xie",
+      "profile_url": "https://thecourseforum.com/course/15651/13218/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Mona Sloane",
+      "profile_url": "https://thecourseforum.com/course/15651/13219/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Farhana Faruqe",
+      "profile_url": "https://thecourseforum.com/course/15651/13220/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Heman Shakeri",
+      "profile_url": "https://thecourseforum.com/course/15651/13222/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Aiying Zhang",
+      "profile_url": "https://thecourseforum.com/course/15651/13224/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Sheng Li",
+      "profile_url": "https://thecourseforum.com/course/15651/13228/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Jeffrey Blume",
+      "profile_url": "https://thecourseforum.com/course/15651/13229/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Alex Gates",
+      "profile_url": "https://thecourseforum.com/course/15651/13230/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Tom Hartvigsen",
+      "profile_url": "https://thecourseforum.com/course/15651/13504/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Javier Rasero",
+      "profile_url": "https://thecourseforum.com/course/15651/13550/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Mar Hicks",
+      "profile_url": "https://thecourseforum.com/course/15651/13553/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Mai Dahshan",
+      "profile_url": "https://thecourseforum.com/course/15651/13668/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Nur Yildirim",
+      "profile_url": "https://thecourseforum.com/course/15651/13669/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Chirag Agarwal",
+      "profile_url": "https://thecourseforum.com/course/15651/13671/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Hannah Bako",
+      "profile_url": "https://thecourseforum.com/course/15651/14045/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "YY Ahn",
+      "profile_url": "https://thecourseforum.com/course/15651/14048/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Jordan Bryan",
+      "profile_url": "https://thecourseforum.com/course/15651/14049/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "Tyler Cody",
+      "profile_url": "https://thecourseforum.com/course/15651/14050/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "William Basener",
+      "profile_url": "https://thecourseforum.com/course/15651/6594/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    },
+    {
+      "instructor_name": "John Van Horn",
+      "profile_url": "https://thecourseforum.com/course/15651/13871/",
+      "rating": "—",
+      "difficulty": "—",
+      "gpa": "—"
+    }
   ]
 }
