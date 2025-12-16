@@ -80,19 +80,9 @@ Get a free API key from: https://aistudio.google.com/apikey
 
 ---
 
-## Usage
-
-### 1. Start the server
-
-```bash
-python -m uvicorn app.main:app --reload
-```
-
-### 2. Prepare data caches (optional - already included)
+### 3. Prepare data caches (optional - already included)
 
 The repository includes pre-cached data files for RateMyProfessor and CourseForum reviews. If you need to rebuild them from scratch:
-
-#### 2.1 Build review caches first
 
 ```bash
 # Build RateMyProfessors cache (takes a while)
@@ -101,7 +91,15 @@ python scripts/build_rmp_cache.py
 # TCF instructor reviews are already cached in app/data/cache/tcf_instructor_reviews.json
 ```
 
-#### 2.2 Index course data (first time only)
+## Usage
+
+### 1. Start the server
+
+```bash
+python -m uvicorn app.main:app --reload
+```
+
+### 2 Index course data (first time only)
 
 Visit http://localhost:8000/admin/index and click **"Run Indexing"**
 
