@@ -88,7 +88,7 @@ async def run_indexing(request: Request):
     """Run course indexing from SIS API."""
     try:
         indexer = CourseIndexer()
-        count = indexer.index_courses(term="1262", force_refresh=True)
+        count = indexer.index_courses(term="1262", force_refresh=False)
         
         return templates.TemplateResponse(
             "admin_index.html",
