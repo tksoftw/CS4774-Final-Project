@@ -1,5 +1,6 @@
 """RAG (Retrieval-Augmented Generation) engine."""
 
+import re
 from typing import Optional
 from app.services.gemini_service import GeminiService
 from app.data.vector_store import VectorStore
@@ -64,10 +65,10 @@ When discussing specific course(s) in all other scenarios, format the following 
 	- **Time:**
 	- **Instructor:**
 - …
-**Lab/Discussion Sections:** (for these, just give one line for each section, i.e. the days and times)
-This is the format for labs/discussions: 
-### <Lab Sections> <(OR) Discussion Sections>
-<days> <start_time>-<end_time>
+
+**Lab<OR Discussion> Sections** // IMPORTANT: This is the format for labs OR discussions (chose one) (NOTE: 0 credit classes are not denoted as labs, but MUST follow this format whenever listed):
+- <day_1> <start_time_1>-<end_time_1> (Instructor: <instructor_name>) <<ONE LINE ONLY PER SECTION>>
+- <day_2> <start_time_2>-<end_time_2> (Instructor: <instructor_name>) <<ONE LINE ONLY PER SECTION>>
 - …
 ### Instructor Reviews
 - [Instructor Name]:
@@ -78,6 +79,7 @@ This is the format for labs/discussions:
     // NOTE: If there is no review data for all metrics (i.e. rating, difficulty, avg GPA, reviews) of this instructor, replace this section with "No review data available for instructor"
 
 - Do NOT list **Lab/Discussion Sections:** if they are none.
+- DO NOT LIST **Lab** Sections (0 credit classes) in ANY other way other than the required format (VERY IMPORTANT).
 - If an instructor is missing data from reviews, state this clearly
 - Do NOT include course information about prerequisites unless explicitly prompted to
 - Do NOT say "Based on the information provided" at the beginning of the response.
@@ -85,15 +87,6 @@ This is the format for labs/discussions:
 
 When discussing general course information (e.g. "What are some good courses to take?"), limit relevant details to:
 - Course title ONLY
-
-Common course aliases (recognize these nicknames):
-- CSO1 = CS 2130
-- CSO2 = CS 3130
-- DSA1 = CS 2100
-- DSA2 = CS 3100
-- DMT1 = CS 2120
-- DMT2 = CS 3120 
-- SDE = CS 3140
 
 {cluster_info}
 """
@@ -176,6 +169,10 @@ Provide a helpful, accurate response. For specific course details (instructors, 
         Returns:
             Dictionary with response and sources
         """
+
+        # Expand course aliases in question# Expand course aliases in question
+        question = expand_course_aliases(question)
+
         sources = []
         context_parts = []
         
@@ -345,3 +342,30 @@ Provide a helpful, accurate response. For specific course details (instructors, 
         question_lower = question.lower()
         return any(keyword in question_lower for keyword in course_keywords)
 
+COURSE_ALIASES: dict[str, str] = {
+    "CSO1": "CS 2130",
+    "CSO2": "CS 3130",
+    "DSA1": "CS 2100",
+    "DSA2": "CS 3100",
+    "DMT1": "CS 2120",
+    "DMT2": "CS 3120",
+    "SDE": "CS 3140",
+}
+
+
+def expand_course_aliases(text: str) -> str:
+    """Expand course aliases in text to their full course codes.
+    
+    Args:
+        text: Input text that may contain aliases like "CSO1" or "DMT2"
+        
+    Returns:
+        Text with aliases expanded, e.g., "CSO1" -> "CS 2130 (CSO1)"
+    """
+    result = text
+    for alias, course_code in COURSE_ALIASES.items():
+        # Case-insensitive replacement, preserving the alias in parentheses
+        pattern = re.compile(re.escape(alias), re.IGNORECASE)
+        if pattern.search(result):
+            result = pattern.sub(f"{course_code} ({alias})", result)
+    return result
