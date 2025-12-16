@@ -1,12 +1,13 @@
 """Document builder for RAG course documents.
 
-Combines data from multiple sources (SIS, Hooslist, TCF) into 
+Combines data from multiple sources (SIS, Hooslist, TCF, RMP) into 
 unified text documents for vector embedding and retrieval.
 """
 
 from typing import Optional
 from app.config import get_settings, get_course_clusters, get_cluster_description
 from app.data.sources.sis_api import SISApi
+from app.data.stores.rmp_reviews_loader import get_rmp_loader
 
 
 class DocumentBuilder:
@@ -21,6 +22,7 @@ class DocumentBuilder:
         course: dict,
         hooslist_info: Optional[dict] = None,
         reviews: Optional[list[dict]] = None,
+        include_rmp: bool = True,
     ) -> str:
         """Build a complete course document for RAG indexing.
         
@@ -31,6 +33,7 @@ class DocumentBuilder:
             course: Course dictionary from SIS API
             hooslist_info: Optional dict with 'description' and 'prerequisites' from Hooslist
             reviews: Optional list of instructor review dictionaries from TCF
+            include_rmp: Whether to include RateMyProfessor reviews
             
         Returns:
             Formatted text document for embedding
@@ -87,11 +90,43 @@ class DocumentBuilder:
         if course.get("enrollment_total") is not None:
             parts.append(f"Enrollment: {course.get('enrollment_total', 0)}/{course.get('class_capacity', 0)}")
         
+        # Instructor (not weighted)
+        instructors = course.get("instructors", [])
+        if instructors:
+            inst_names = [inst.get("name", "Staff") for inst in instructors]
+            parts.append(f"Instructor: {', '.join(inst_names)}")
+        
+        # Schedule - days and times (not weighted)
+        meetings = course.get("meetings", [])
+        if meetings:
+            schedule_parts = []
+            for meeting in meetings:
+                days = meeting.get("days", "")
+                start_time = meeting.get("start_time", "")
+                end_time = meeting.get("end_time", "")
+                
+                if days and start_time:
+                    start_fmt = self.sis_api.format_time(start_time)
+                    end_fmt = self.sis_api.format_time(end_time) if end_time else ""
+                    if end_fmt:
+                        schedule_parts.append(f"{days} {start_fmt}-{end_fmt}")
+                    else:
+                        schedule_parts.append(f"{days} {start_fmt}")
+            
+            if schedule_parts:
+                parts.append(f"Schedule: {'; '.join(schedule_parts)}")
+        
         # Build base document
         base_doc = "\n".join(parts)
         
-        # Append reviews if available
-        return self._append_reviews(base_doc, reviews)
+        # Append TCF reviews if available
+        doc_with_tcf = self._append_reviews(base_doc, reviews)
+        
+        # Append RMP reviews for this semester's instructors
+        if include_rmp:
+            doc_with_tcf = self._append_rmp_reviews(doc_with_tcf, course)
+        
+        return doc_with_tcf
     
     def _get_description(self, course: dict, hooslist_info: Optional[dict]) -> str:
         """Get course description from available sources.
@@ -110,19 +145,19 @@ class DocumentBuilder:
         return ""
     
     def _append_reviews(self, base_doc: str, reviews: Optional[list[dict]]) -> str:
-        """Append review data to document.
+        """Append TCF review data to document.
         
         Args:
             base_doc: Base document text
-            reviews: List of review dictionaries
+            reviews: List of review dictionaries from TheCourseForum
             
         Returns:
             Document with reviews appended
         """
         if not reviews:
-            return base_doc + "\n\nReviews: No review data available."
+            return base_doc + "\n\nTCF Reviews: No review data available."
         
-        review_parts = [f"\n\nReviews ({len(reviews)} instructors):"]
+        review_parts = [f"\n\nTCF Reviews ({len(reviews)} instructors):"]
         
         for review in reviews:
             instructor = review.get("instructor_name", "Unknown")
@@ -147,6 +182,70 @@ class DocumentBuilder:
             review_parts.append(review_text)
         
         return base_doc + "\n".join(review_parts)
+    
+    def _append_rmp_reviews(self, base_doc: str, course: dict) -> str:
+        """Append RateMyProfessor reviews for this semester's instructors.
+        
+        Args:
+            base_doc: Base document text
+            course: Course dictionary from SIS (with 'instructors' list)
+            
+        Returns:
+            Document with RMP reviews appended
+        """
+        rmp_loader = get_rmp_loader()
+        instructors = course.get("instructors", [])
+        
+        if not instructors:
+            return base_doc
+        
+        subject = course.get("subject", "")
+        catalog_nbr = course.get("catalog_nbr", "")
+        course_code = f"{subject} {catalog_nbr}"
+        
+        rmp_parts = []
+        
+        for inst in instructors:
+            inst_name = inst.get("name", "").strip()
+            if not inst_name or inst_name.lower() == "staff":
+                continue
+            
+            # Get RMP reviews for this instructor + course
+            reviews = rmp_loader.get_reviews_for_course_instructor(
+                course_code, inst_name, limit=5
+            )
+            
+            if not reviews:
+                continue
+            
+            # Get summary stats
+            summary = rmp_loader.summarize_reviews(reviews, inst_name)
+            
+            # Format for document
+            inst_section = f"\n  {inst_name} (RateMyProfessor):"
+            
+            if summary["avg_clarity"]:
+                inst_section += f"\n    - Clarity: {summary['avg_clarity']}/5"
+            if summary["avg_helpful"]:
+                inst_section += f"\n    - Helpful: {summary['avg_helpful']}/5"
+            if summary["avg_difficulty"]:
+                inst_section += f"\n    - Difficulty: {summary['avg_difficulty']}/5"
+            if summary["would_take_again_pct"] is not None:
+                inst_section += f"\n    - Would Take Again: {summary['would_take_again_pct']}%"
+            
+            # Add sample comments (truncated)
+            if summary["sample_comments"]:
+                inst_section += "\n    - Sample reviews:"
+                for comment in summary["sample_comments"][:2]:
+                    truncated = comment[:150] + "..." if len(comment) > 150 else comment
+                    inst_section += f"\n      * \"{truncated}\""
+            
+            rmp_parts.append(inst_section)
+        
+        if not rmp_parts:
+            return base_doc
+        
+        return base_doc + f"\n\nRateMyProfessor Reviews:" + "".join(rmp_parts)
     
     def build_metadata(
         self,

@@ -2,11 +2,11 @@
   "subject": "CS",
   "catalog_number": "1110",
   "title": "Introduction to Programming",
-  "class_number": "14972",
+  "class_number": "16135",
   "has_description": true,
   "has_prerequisites": false,
   "has_reviews": true,
   "review_count": 1,
-  "clusters": "cs_core_foundation",
+  "clusters": "cs_prerequisites",
   "course_code": "CS 1110"
 }

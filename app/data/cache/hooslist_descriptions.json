@@ -634,5 +634,165 @@
   "STS_3500": {
     "description": "Specific topics vary. Advanced level examination of the relationships among science, technology and society.",
     "prerequisites": ""
+  },
+  "DS_1001": {
+    "description": "Exposes students to the emerging field of Data Science, its domain areas, and popular applications. Topics include analytical methods, ethical issues associated with the field, engineering, and systems necessary to support data-related work, and design principles commonly seen in data communications and human center design. Students learn from leaders in the field through a series of guest lectures and work through discussion examples.",
+    "prerequisites": ""
+  },
+  "DS_1002": {
+    "description": "Will expose student to fundamental coding languages in data science. Python and R will be the primary focus of the course. Popular packages such as pandas and tidyverse will be covered in depth. Additionally, project management skills such as Git and Github will be covered.",
+    "prerequisites": ""
+  },
+  "DS_2002": {
+    "description": "This course will center on exposing students to contemporary pipelines for data analysis through a series of steadily escalating use cases.  The course will begin with simple local database construction such as SQLite and evolve to cloud base systems such as AWS or Google Cloud. This progression will include topics such as data lakes and other non-SQL applications as appropriate.",
+    "prerequisites": ""
+  },
+  "DS_2003": {
+    "description": "The course is designed to not only teach students tools necessary to visualize data but also effective techniques for explaining data driven results with an emphasis on communicating statistical output in a manner that best represents the findings. Examples might include tailoring messages based on the audience or shaping visualizations to follow a story-line. Content on the development of interactive plots and dashboards will also be included.",
+    "prerequisites": ""
+  },
+  "DS_2004": {
+    "description": "Explores principles and applications of data ethics within a broader social framework that prioritizes conversations about policy, regulatory frameworks, accountability, transparency, and governance models. Will discuss who is responsible for doing responsible data science, question how our work shapes the world around us, and understand the impacts of big data on people and communities.",
+    "prerequisites": ""
+  },
+  "DS_2024": {
+    "description": "Explores principles and applications of data ethics within a broader social framework. Works to lay foundational knowledge for more advanced courses in the Value domain of the major. Will discuss who is responsible for doing responsible data science, question how our work shapes the world around us, and understand the impacts of big data on people and communities.",
+    "prerequisites": ""
+  },
+  "DS_3001": {
+    "description": "This course exposes students to foundational knowledge in each of the four high level domain areas of data science (Value, Design, Analytics, Systems). This includes an emphasis on ethical issues surrounding the field of data science and how these issues originate and extend into society more broadly.",
+    "prerequisites": ""
+  },
+  "DS_3021": {
+    "description": "Exposes students to foundational knowledge in the area of analytics, especially as it relates to machine learning. The focus is on methods needed to prepare data for machine learning models, how to evaluate the output of ML models and engineering features.",
+    "prerequisites": ""
+  },
+  "DS_3025": {
+    "description": "Engage with and train in the use of key concepts in machine learning and math: OLS estimator for regression; logistic regression & maximum likelihood estimator; multiple linear regression; principal components analysis & multiple correspondence analysis; neural networks; logarithms; probability distributions; integrals; multivariate optimization; matrix notation, eigen-math, and matrix decomposition; infinite power series & Taylor series.",
+    "prerequisites": ""
+  },
+  "DS_3026": {
+    "description": "Explore mathematical foundations of inferential and prediction frameworks, with emphasis on computation, used to learn from data. Frequentist, Bayesian, and Likelihood viewpoints are all considered. Topics: principles of estimation, optimality, bias, variance, consistency, sampling distributions, estimating equations, information, bootstrap methods, ROC curves, shrinkage, large sample theory, prediction optimality versus estimation optimality.",
+    "prerequisites": ""
+  },
+  "DS_4002": {
+    "description": "The data science project course will allow students to take the knowledge gained in each of the four required courses and apply them to a data driven problem. Students will work in groups and can either choose a project provided by SDS faculty or can propose a project for approval. Upon completion of the course students will be required to present their results and publish project content to an open forum.",
+    "prerequisites": ""
+  },
+  "DS_4023": {
+    "description": "Principles of interactivity in application and dashboard development using R, Python, and JavaScript programming languages. Design visually appealing and user-friendly interfaces, develop interactive applications for data visualization, and build dynamic dashboards for effective data communication with end-users. Covers theoretical concepts and hands-on implementation to provide a comprehensive understanding of the full design process.",
+    "prerequisites": ""
+  },
+  "DS_4024": {
+    "description": "Explainable artificial intelligence (XAI) is a subfield of machine learning that provides transparency for complex models to connect the technical meaning to social interpretation. Explore interpretability, transparency, and black-box machine learning methods. Covers definitions, decision support, trust, and ethical considerations, and the latest advances in creating reliable and transparent AI models.",
+    "prerequisites": ""
+  },
+  "DS_4125": {
+    "description": "Understand Deep Learning covering neural networks, activation functions, and optimization algorithms. Gain experience with TensorFlow and PyTorch, mastering key techniques such as Convolutional Neural Networks (CNNs), Recurrent Neural Networks (RNNs), and Generative Adversarial Networks (GANs). Explore transfer learning, reinforcement learning, and natural language processing (NLP), along with industry applications and ethical considerations.",
+    "prerequisites": ""
+  },
+  "DS_4320": {
+    "description": "Comprehensive exploration of the multifaceted aspects of data creation, emphasizing the symbiotic relationship between design and data. Students will gain insight into the intentional and unintentional mechanisms that contribute to data creation, including human input, technological processes, environmental factors, and systemic influences.",
+    "prerequisites": ""
+  },
+  "DS_4993": {
+    "description": "Reading and research under the direction of a faculty member. Students must obtain approval from a faculty advisor to approve and direct the independent study. Final approval by the Director of Undergraduate Programs is also required.",
+    "prerequisites": ""
+  },
+  "DS_5001": {
+    "description": "Covers foundations and applications of NLP with a focus on the most popular form of unstructured data ¿ text. Convert source texts into structure-preserving analytical form and then apply information theory, NLP tools, and vector-based methods to explore language models, topic models, sentiment analyses, and GenAI techniques. Focus is on unsupervised methods to explore cognitive patterns in texts, with real-world examples and demonstrations.",
+    "prerequisites": ""
+  },
+  "DS_5003": {
+    "description": "Provides healthcare domain knowledge, healthcare data understanding, and data science methodologies to solve problems. Understand data types, models, and sources, including electronic health record data; health outcomes, quality, risk, and safety data; and unstructured data, such as clinical text data; biomedical sensor data; and biomedical image data. Querying with SQL, data visualization with Tableau, and analysis and prediction with Python.",
+    "prerequisites": ""
+  },
+  "DS_5007": {
+    "description": "This course looks into the past, present, and future of technologies that impact labor, with an eye to empowering students with knowledge about the social, economic, and political dimensions of the tools they use both inside and outside of work. The course covers labor history, whistleblowers, and hidden histories of common technologies that reorient common assumptions about what technologies can do, and what they have done in the past.",
+    "prerequisites": ""
+  },
+  "DS_5012": {
+    "description": "Provides a foundation in discrete mathematics, data structures, algorithmic design and implementation, computational complexity, parallel computing, and data integrity and consistency. Case studies and exercises will be drawn from real-world examples (e.g., bioinformatics, public health, marketing, and security).",
+    "prerequisites": ""
+  },
+  "DS_5023": {
+    "description": "Principles of interactivity in application and dashboard development using R, Python, and JavaScript programming languages. Design visually appealing and user-friendly interfaces, develop interactive applications for data visualization, and build dynamic dashboards for effective data communication with end-users. Covers theoretical concepts and hands-on implementation to provide a comprehensive understanding of the full design process at the graduate level.",
+    "prerequisites": ""
+  },
+  "DS_5030": {
+    "description": "Provides an in-depth exploration of probabilistic and statistical methods used to understand, quantify, and manage uncertainty. Learn foundational concepts in probability and statistics, simulation techniques, and modern approaches to parameter estimation, decision theory, and hypothesis testing. Topics include parametric and nonparametric methods, Bayesian and frequentist paradigms, and applications of uncertainty in real-world problems.",
+    "prerequisites": ""
+  },
+  "DS_5070": {
+    "description": "This course will equip students with some of the most commonly used deep learning architectures. We will explore feed-forward networks, convolutional neural networks, UNETs, encoders-decoders, generative adversarial networks and transformers. We will also analyze tools of explainable AI. Focused on environmental applications, students will apply these techniques to real-world data, solving problems in prediction, pattern recognition, and data-driven insights. Solid background in probability, statistics, and in coding (preferably Python) is recommended for enrollment in this course.",
+    "prerequisites": ""
+  },
+  "DS_5220": {
+    "description": "An intensive overview of cloud infrastructure and their role in data science. Topics will include storage as a service, ephemeral computing resources, auto-scaling, and event-driven workloads. Special attention will be paid to cloud-native design patterns, which are built assuming the unique functionality of cloud computing resources.",
+    "prerequisites": ""
+  },
+  "DS_6001": {
+    "description": "Covers the practice of data science, including communication, exploratory data analysis, and visualization. Also covered are the selection of algorithms to suit the problem to be solved, user needs, and data. Case studies will explore the impact of data science across different domains.",
+    "prerequisites": ""
+  },
+  "DS_6002": {
+    "description": "This course examines the ethical issues arising around big data and provides frameworks, context, concepts, and theories to help students think through and deal with the issues as they encounter them in their professional lives.",
+    "prerequisites": ""
+  },
+  "DS_6015": {
+    "description": "Designed for capstone project teams to meet in groups with advisors and clients to advance work on their projects. Capstone course for MSDS Online students.",
+    "prerequisites": ""
+  },
+  "DS_6021": {
+    "description": "Comprehensive introduction to predictive modeling, a cornerstone of data science and machine learning. Learn the fundamental concepts, techniques, and tools used to build models while emphasizing both theoretical understanding and practical applications. The topics include we will cover are an in-depth analysis of linear models and different variants, their extension to generalized linear models, and an introduction to nonparametric regression.",
+    "prerequisites": ""
+  },
+  "DS_6030": {
+    "description": "This course covers fundamentals of data mining and machine learning within a common statistical framework. Topics include regression, classification, clustering, resampling, regularization, tree-based methods, ensembles, boosting, and Support Vector Machines. Coursework is conducted in the R programming language.",
+    "prerequisites": ""
+  },
+  "DS_6050": {
+    "description": "A graduate-level course on deep learning fundamentals and applications with emphasis on their broad applicability to problems across a range of disciplines. Topics include regularization, optimization, convolutional networks, sequence modeling, generative learning, instance-based learning, and deep reinforcement learning. Students will complete several substantive programming assignments. A course covering statistical techniques such as regression.",
+    "prerequisites": ""
+  },
+  "DS_6210": {
+    "description": "Many problems in data science essentially boil down to some mathematical relationships that are to be solved numerically. But have you ever wondered how computers could do math? This graduate-level data science course aims to cover fundamental topics of scientific computing, specifically selected and curated for data scientists, including numerical errors, root finding algorithms, numerical linear algebra, and numerical optimization.",
+    "prerequisites": ""
+  },
+  "DS_6310": {
+    "description": "Explores the mathematical foundations of inferential and prediction frameworks commonly used to learn from data. Frequentist, Bayesian, Likelihood viewpoints are considered. Topics include: principles of estimation, optimality, bias, variance, consistency, sampling distributions, estimating equations, information, Bootstrap methods, ROC curves, shrinkage, and some large-sample theory, prediction optimality versus estimation optimality.",
+    "prerequisites": ""
+  },
+  "DS_6404": {
+    "description": "Introduces physics-aware deep learning (PADL), an emerging approach that embeds physical laws into neural networks for accurate, efficient modeling. Topics include differential equations, physics-informed neural networks, neural operators, and PyTorch implementation. Students gain both theoretical foundations and practical skills to apply PADL across disciplines.",
+    "prerequisites": ""
+  },
+  "DS_6410": {
+    "description": "Fundamentals of data mining and machine learning within a common statistical framework. Topics include boosting, ensembles, Support Vector Machines, model-based clustering, forecasting, neural networks, recommender systems, market basket analysis, and network centrality.",
+    "prerequisites": ""
+  },
+  "DS_6700": {
+    "description": "Combines topics in data ethics, critical data studies, public policy, governance, and regulation. Address challenges by topic (Health, Education, Culture & Entertainment, Security & Defense, Cities, Environment, Labor). Research how data-centric systems are deployed within socioeconomic ecosystems and shape the world. Interrogate connections between data science, governments, industry, civil society organizations, and communities.",
+    "prerequisites": ""
+  },
+  "DS_6993": {
+    "description": "Specialized or advanced topics not in DS current course offerings. Requires (a) approval of the program director and (b) an SDS faculty member who will serve as instructor.  Propose a syllabus which includes a week-by-week accounting of the topics, materials (papers and textbooks), and assessments.  Reach out to the program director for more details.",
+    "prerequisites": ""
+  },
+  "DS_7600": {
+    "description": "This graduate-level course explores the principles, methodologies, and applications of human-centered design (HCD). Students will learn how to create solutions that meet real human needs. The course combines theoretical foundations with practical application through hands-on projects where students will define problems, prototype solutions, and test with users to develop impactful, user-centered products and services.",
+    "prerequisites": ""
+  },
+  "DS_8104": {
+    "description": "Networks provide a unifying framework to study the structure hidden within complex data. This graduate-level course focuses on the fundamental concepts and statistics as well as recent advancements and applications of network science. Topics include: graph theory, structural paradoxes, measures and algorithms for quantifying importance, community detection, network inference, recommendation systems, and link prediction.",
+    "prerequisites": ""
+  },
+  "DS_8998": {
+    "description": "Engages students in identification of a research question, a review of the literature and the application of an existing data science tool or technique (algorithm) to that problem. This is a mentored experience and will allow the student to demonstrate their capacity for research and begin to develop a relationship with a faculty mentor in Data Science. Course requires instructor permission.",
+    "prerequisites": ""
+  },
+  "DS_9999": {
+    "description": "PhD level Dissertation Research.",
+    "prerequisites": ""
   }
 }
