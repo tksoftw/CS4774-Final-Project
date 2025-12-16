@@ -5,6 +5,7 @@ import time
 from pathlib import Path
 from typing import Optional
 from app.config import get_settings
+from app.course_clusters import get_course_clusters
 from app.services.sis_service import SISService
 from app.data.scrapers.tcf_scraper import scrape_course, BASE_URL  # Import the function
 from app.data.vector_store import VectorStore
@@ -326,6 +327,9 @@ class CourseLoader:
             doc_text = self._append_reviews_to_document(base_doc, matched_reviews, course_stats)
             
             # Create metadata
+            course_code = f"{course.get('subject', '')} {course.get('catalog_nbr', '')}"
+            clusters = get_course_clusters(course_code)
+
             metadata = {
                 "subject": course.get("subject", ""),
                 "catalog_number": course.get("catalog_nbr", ""),
@@ -335,6 +339,8 @@ class CourseLoader:
                 "has_prerequisites": bool(hooslist_info.get("prerequisites")),
                 "has_reviews": len(matched_reviews) > 0,
                 "review_count": len(matched_reviews),
+                "clusters": ",".join(clusters) if clusters else "",
+                "course_code": course_code,
             }
             
             documents.append(doc_text)

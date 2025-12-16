@@ -3,6 +3,7 @@
 import httpx
 from typing import Optional
 from app.config import get_settings
+from app.course_clusters import get_course_clusters, get_cluster_description
 from app.models.schemas import Course, Section
 
 
@@ -277,55 +278,86 @@ class SISService:
             return time_str  # Return original if parsing fails
     
     def get_course_document(self, cls: dict, hooslist_info: dict = None) -> str:
-        """Convert course data to text document for RAG.
-        
+        """Convert course data to text document for RAG with weighted field repetition.
+
+        Fields are repeated according to their configured weights to control similarity:
+        - Description: repeated 3x (most important for semantic similarity)
+        - Title: repeated 2x
+        - Prerequisites: repeated 2x
+        - Subject: repeated 1x
+        - Clusters: repeated 2x (groups related courses like AI courses together)
+        - Instructor: not included (weight 0)
+        - Schedule/Time: not included (weight 0)
+
         Args:
             cls: Course class dictionary from API
             hooslist_info: Optional dict with 'description' and 'prerequisites' from Hooslist
-            
+
         Returns:
-            Formatted text document
+            Formatted text document with weighted field repetition
         """
-        parts = [
-            f"Course: {cls.get('subject', '')} {cls.get('catalog_nbr', '')}",
-            f"Title: {cls.get('descr', '')}",
-        ]
-        
-        # Use Hooslist description if available, otherwise fall back to SIS description
+        # Get embedding weights from config
+        weights = (self.settings.embed_weight_description, self.settings.embed_weight_title,
+                  self.settings.embed_weight_prerequisites, self.settings.embed_weight_subject,
+                  self.settings.embed_weight_cluster, self.settings.embed_weight_instructor,
+                  self.settings.embed_weight_schedule)
+        desc_w, title_w, prereq_w, subject_w, cluster_w, instr_w, sched_w = weights
+
+        parts = []
+
+        # Subject (weight controlled)
+        subject = cls.get('subject', '')
+        catalog_nbr = cls.get('catalog_nbr', '')
+        subject_line = f"Subject: {subject} {catalog_nbr}"
+        parts.extend([subject_line] * subject_w)
+
+        # Title (weight controlled)
+        title = cls.get('descr', '')
+        if title:
+            title_line = f"Title: {title}"
+            parts.extend([title_line] * title_w)
+
+        # Description (weight controlled - most important)
+        description = ""
         if hooslist_info and hooslist_info.get("description"):
-            parts.append(f"Description: {hooslist_info['description']}")
+            description = hooslist_info['description']
         elif cls.get("crse_descr"):
-            parts.append(f"Description: {cls.get('crse_descr', '')}")
-        
-        # Add prerequisites from Hooslist
+            description = cls.get('crse_descr', '')
+
+        if description:
+            desc_line = f"Description: {description}"
+            parts.extend([desc_line] * desc_w)
+
+        # Prerequisites (weight controlled)
+        prerequisites = ""
         if hooslist_info and hooslist_info.get("prerequisites"):
-            parts.append(f"Prerequisites: {hooslist_info['prerequisites']}")
-        
+            prerequisites = hooslist_info['prerequisites']
+
+        if prerequisites:
+            prereq_line = f"Prerequisites: {prerequisites}"
+            parts.extend([prereq_line] * prereq_w)
+
+        # Course Clusters (weight controlled - groups related courses together)
+        course_code = f"{subject} {catalog_nbr}"
+        clusters = get_course_clusters(course_code)
+
+        if clusters:
+            cluster_lines = []
+            for cluster in clusters:
+                desc = get_cluster_description(cluster)
+                cluster_lines.append(f"Cluster: {cluster} - {desc}")
+            # Repeat all cluster information according to weight
+            for _ in range(cluster_w):
+                parts.extend(cluster_lines)
+
+        # Credits (not weighted, just include once)
         if cls.get("units"):
             parts.append(f"Credits: {cls.get('units', '')}")
-        
-        # Add section info
-        meetings = cls.get("meetings", [])
-        if meetings:
-            meeting = meetings[0]
-            if meeting.get("days"):
-                parts.append(f"Days: {meeting.get('days', '')}")
-            if meeting.get("start_time") and meeting.get("end_time"):
-                start = self._format_time(meeting.get("start_time", ""))
-                end = self._format_time(meeting.get("end_time", ""))
-                parts.append(f"Time: {start} - {end}")
-            if meeting.get("facility_descr"):
-                parts.append(f"Location: {meeting.get('facility_descr', '')}")
-        
-        # Add instructor
-        instructor = self._extract_instructor(cls)
-        if instructor:
-            parts.append(f"Instructor: {instructor}")
-        
-        # Add enrollment
+
+        # Enrollment (not weighted, just include once)
         if cls.get("enrollment_total") is not None:
             parts.append(f"Enrollment: {cls.get('enrollment_total', 0)}/{cls.get('class_capacity', 0)}")
-        
+
         return "\n".join(parts)
     
     def fetch_all_cs_courses(self, term: str = "1252") -> list[dict]:

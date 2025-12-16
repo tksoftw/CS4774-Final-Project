@@ -132,6 +132,20 @@ The core RAG application is functional with async chat, markdown rendering, cour
 - Falls back to semantic search for remaining results
 - Improved accuracy for specific course queries (e.g., "CS 4774")
 
+#### Weighted Embeddings
+- **Fixed vector similarity** by implementing configurable field weights
+- Description repeated 3x (most influential for similarity)
+- Title repeated 2x, Prerequisites repeated 2x, Subject repeated 1x
+- Instructor and schedule info excluded (weight 0)
+- Courses with similar descriptions now cluster together properly
+
+#### Course Clustering System
+- **Custom course groupings** based on UVA CS degree requirements
+- 9 course clusters: Core CS, AI/ML, Algorithms/Theory, Systems/Architecture, etc.
+- **Cluster weighting** in embeddings (repeated 2x) to group related courses
+- AI/ML courses now cluster together regardless of specific content differences
+- Example: "artificial intelligence courses" returns CS 4774, CS 4750, CS 3710, etc.
+
 #### Indexing Improvements
 - Added progress indicators for SIS fetching
 - Added progress indicators for HoosList fetching
@@ -149,11 +163,13 @@ The core RAG application is functional with async chat, markdown rendering, cour
 
 | Metric | Value |
 |--------|-------|
-| Indexed Courses | ~200 unique courses |
-| Indexed Sections | ~800 sections |
+| Indexed Courses | 143 unique courses |
+| Indexed Sections | 822 sections |
 | Subjects Covered | CS, DSA, STAT, MATH, STS |
+| Course Clusters | 9 clusters (AI/ML, Core CS, Security, etc.) |
 | Avg Query Time | 2-4 seconds |
 | Vector Dimensions | 3072 |
+| Embedding Weights | Desc:3, Title:2, Prereq:2, Subject:1, Clusters:2 |
 
 ---
 

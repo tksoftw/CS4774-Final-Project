@@ -21,6 +21,16 @@ class Settings(BaseSettings):
     # Vector Database
     chroma_persist_dir: str = "./data/chroma"
     
+    # Embedding Weights (higher = more influence on similarity)
+    # These control how much each field affects course similarity
+    embed_weight_description: int = 3   # Course description (what it's about)
+    embed_weight_title: int = 2         # Course title
+    embed_weight_prerequisites: int = 2
+    embed_weight_subject: int = 1
+    embed_weight_cluster: int = 2       # Course clusters (AI courses together, etc.)
+    embed_weight_instructor: int = 0
+    embed_weight_schedule: int = 0
+    
     # SIS API
     sis_api_base_url: str = "https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch"
     
