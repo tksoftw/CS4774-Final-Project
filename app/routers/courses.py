@@ -58,6 +58,7 @@ async def courses_page(
     term: str = Query(default="1262"),
     page: int = Query(default=1),
     user_id: str = Query(default="default"),
+    searched: str = Query(default=""),
 ):
     """Render the course browser page."""
     courses = []
@@ -69,11 +70,13 @@ async def courses_page(
     scheduled = get_user_schedule(user_id)
     scheduled_keys = {(item["course_id"], item["section_id"]) for item in scheduled}
     
-    # Only search if we have some filter
-    if subject or keyword:
+    # Check if we have cached data for this term
+    has_cache = sis_store.has(term)
+    
+    # Search if user clicked search button (searched=true) or has specific filters
+    if searched or subject or keyword:
         try:
-            # Try cache first for faster search
-            if sis_store.has(term):
+            if has_cache:
                 cached_courses = sis_store.load(term)
                 from_cache = True
                 
@@ -83,7 +86,7 @@ async def courses_page(
                 keyword_lower = keyword.lower() if keyword else ""
                 
                 for course in cached_courses:
-                    # Filter by subject
+                    # Filter by subject (skip if "All Subjects" selected)
                     if subject_upper and course.get("subject", "").upper() != subject_upper:
                         continue
                     
@@ -100,16 +103,17 @@ async def courses_page(
                 courses = filtered
                 total_count = len(courses)
             else:
-                # Fall back to API search
-                sis_api = SISApi()
-                response = sis_api.search(
-                    subject=subject if subject else None,
-                    keyword=keyword if keyword else None,
-                    term=term,
-                    page=page,
-                )
-                courses = sis_api.get_classes_list(response)
-                total_count = len(courses)
+                # Fall back to API search (requires at least subject or keyword)
+                if subject or keyword:
+                    sis_api = SISApi()
+                    response = sis_api.search(
+                        subject=subject if subject else None,
+                        keyword=keyword if keyword else None,
+                        term=term,
+                        page=page,
+                    )
+                    courses = sis_api.get_classes_list(response)
+                    total_count = len(courses)
             
         except Exception as e:
             error_message = f"Error searching courses: {str(e)}"
@@ -139,9 +143,10 @@ async def search_courses(
     subject: str = Form(default=""),
     keyword: str = Form(default=""),
     term: str = Form(default="1262"),
+    searched: str = Form(default=""),
 ):
     """Handle course search form submission."""
-    params = []
+    params = ["searched=true"]  # Always mark as searched
     if subject:
         params.append(f"subject={subject}")
     if keyword:

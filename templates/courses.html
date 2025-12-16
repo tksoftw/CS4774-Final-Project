@@ -8,6 +8,7 @@
     <!-- Search Bar -->
     <div class="search-bar">
         <form action="/courses/search" method="post" class="search-form">
+            <input type="hidden" name="searched" value="true">
             <div class="form-group">
                 <label class="form-label">Subject</label>
                 <select name="subject" class="form-select">
@@ -34,9 +35,9 @@
             <div class="form-group">
                 <label class="form-label">Term</label>
                 <select name="term" class="form-select">
-                    <option value="1262" {% if term == '1262' %}selected{% endif %}>Spring 2025</option>
+                    <option value="1262" {% if term == '1262' %}selected{% endif %}>Spring 2026</option>
                     <option value="1258" {% if term == '1258' %}selected{% endif %}>Fall 2025</option>
-                    <option value="1252" {% if term == '1252' %}selected{% endif %}>Spring 2024</option>
+                    <option value="1252" {% if term == '1252' %}selected{% endif %}>Spring 2025</option>
                     <option value="1248" {% if term == '1248' %}selected{% endif %}>Fall 2024</option>
                 </select>
             </div>

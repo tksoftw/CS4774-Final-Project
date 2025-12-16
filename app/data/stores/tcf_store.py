@@ -8,7 +8,7 @@ from typing import List
 class TCFStore:
     """Simple JSON cache for TheCourseForum reviews."""
 
-    def __init__(self, cache_dir: str = "app/data/cache"):
+    def __init__(self, cache_dir: str = "data/cache"):
         self.cache_dir = cache_dir
         os.makedirs(cache_dir, exist_ok=True)
         self.path = os.path.join(cache_dir, "tcf_reviews.json")

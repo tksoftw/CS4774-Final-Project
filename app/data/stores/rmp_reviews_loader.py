@@ -12,7 +12,7 @@ from typing import Optional
 class RMPReviewsLoader:
     """Loads and searches RateMyProfessor reviews from cache."""
     
-    def __init__(self, cache_path: str = "app/data/cache/rmp_reviews.json"):
+    def __init__(self, cache_path: str = "data/cache/rmp_reviews.json"):
         self.cache_path = cache_path
         self._reviews: list[dict] = []
         self._by_professor: dict[str, list[dict]] = {}

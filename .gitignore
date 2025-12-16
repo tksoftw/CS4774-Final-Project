@@ -4,5 +4,5 @@ venv/
 tests/
 data/chroma/
 data/courses/
-data/tests/
+data/test/
 .DS_Store

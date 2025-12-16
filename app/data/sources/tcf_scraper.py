@@ -19,7 +19,7 @@ class TCFScraper:
         "User-Agent": "UVA-Course-Advising-Project/1.0 (academic use)"
     }
     
-    def __init__(self, timeout: float = 10.0, cache_dir: str = "app/data/cache"):
+    def __init__(self, timeout: float = 10.0, cache_dir: str = "data/cache"):
         self.timeout = timeout
         self.store = TCFStore(cache_dir)
     

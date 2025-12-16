@@ -6,7 +6,7 @@ API Documentation: https://s23.cs3240.org/sis-api.html
 Term codes:
     Format: 1 + [2-digit year] + [semester code]
     Semester codes: 2 = Spring, 6 = Summer, 8 = Fall
-    Examples: 1262 = Spring 2025, 1248 = Fall 2024, 1258 = Fall 2025
+    Examples: 1262 = Spring 2026, 1252 = Spring 2025, 1248 = Fall 2024
 """
 
 import httpx
@@ -21,7 +21,7 @@ class SISApi:
     BASE_URL = "https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch"
     OPTIONS_URL = "https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions"
     
-    def __init__(self, timeout: float = 30.0, cache_dir: str = "app/data/cache"):
+    def __init__(self, timeout: float = 30.0, cache_dir: str = "data/cache"):
         self.client = httpx.Client(timeout=timeout, follow_redirects=True)
         self.store = SISStore(cache_dir)
     
@@ -41,7 +41,7 @@ class SISApi:
             catalog_number: Course number (e.g., "4774")
             keyword: Keyword to search in course titles
             instructor: Instructor last name
-            term: Academic term code (default: Spring 2025)
+            term: Academic term code (default: Spring 2026)
             page: Results page number
             
         Returns:

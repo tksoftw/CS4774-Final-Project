@@ -50,7 +50,7 @@ class CourseIndexer:
         """Index courses from all data sources.
         
         Args:
-            term: Academic term code (default: Spring 2025)
+            term: Academic term code (default: Spring 2026)
             subjects: List of subjects to index (default: CS, DS, STAT, MATH, STS)
             force_refresh: Force re-fetch from APIs even if cached
             

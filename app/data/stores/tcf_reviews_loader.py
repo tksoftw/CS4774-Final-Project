@@ -9,7 +9,7 @@ from functools import lru_cache
 class TCFReviewsLoader:
     """Loads TCF instructor reviews from cache and matches by course + instructor."""
     
-    def __init__(self, cache_path: str = "app/data/cache/tcf_instructor_reviews.json"):
+    def __init__(self, cache_path: str = "data/cache/tcf_instructor_reviews.json"):
         self.cache_path = cache_path
         self.data = self._load()
     

@@ -15,7 +15,7 @@ class HooslistApi:
     
     BASE_URL = "https://hooslist.virginia.edu/ClassSchedule/_GetCourseDescription"
     
-    def __init__(self, timeout: float = 10.0, cache_dir: str = "app/data/cache"):
+    def __init__(self, timeout: float = 10.0, cache_dir: str = "data/cache"):
         self.client = httpx.Client(timeout=timeout, follow_redirects=True)
         self.store = HooslistStore(cache_dir)
     

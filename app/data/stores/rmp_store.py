@@ -12,7 +12,7 @@ class RMPStore:
         """Initialize store.
         
         Args:
-            base_path: Base path for cache files (e.g., "app/data/cache/rmp_reviews_1277")
+            base_path: Base path for cache files (e.g., "data/cache/rmp_reviews_1277")
         """
         self.path = base_path + ".json"
         os.makedirs(os.path.dirname(self.path), exist_ok=True)

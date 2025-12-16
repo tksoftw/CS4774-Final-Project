@@ -21,7 +21,7 @@ def parse_course_id_from_url(profile_url: str) -> int:
     return None
 
 
-def load_existing_course_cache(cache_path: str = "app/data/cache/tcf_reviews.json"):
+def load_existing_course_cache(cache_path: str = "data/cache/tcf_reviews.json"):
     """Load the existing course cache with instructor data.
     
     Returns:
@@ -126,7 +126,7 @@ def main():
     store = TCFInstructorReviewsStore()
     
     # Load existing course cache
-    cache_path = "app/data/cache/tcf_reviews.json"
+    cache_path = "data/cache/tcf_reviews.json"
     
     try:
         print(f"Loading existing course cache from {cache_path}...")
