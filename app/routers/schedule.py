@@ -9,6 +9,34 @@ router = APIRouter(prefix="/schedule", tags=["schedule"])
 settings = get_settings()
 templates = Jinja2Templates(directory=str(settings.templates_dir))
 
+
+def format_sis_time(time_str: str) -> str:
+    """Format SIS time string to readable format.
+    
+    Converts "09.00.00.000000" to "9:00 AM", "14.30.00.000000" to "2:30 PM"
+    """
+    if not time_str:
+        return ""
+    
+    try:
+        parts = time_str.split(".")
+        hour = int(parts[0])
+        minute = int(parts[1]) if len(parts) > 1 else 0
+        
+        period = "AM" if hour < 12 else "PM"
+        if hour == 0:
+            hour = 12
+        elif hour > 12:
+            hour -= 12
+        
+        return f"{hour}:{minute:02d} {period}"
+    except (ValueError, IndexError):
+        return time_str
+
+
+# Add custom filter to templates
+templates.env.filters["format_time"] = format_sis_time
+
 # In-memory schedule storage (for demo purposes)
 user_schedules: dict[str, list[dict]] = {}
 

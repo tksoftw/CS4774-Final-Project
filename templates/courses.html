@@ -34,9 +34,10 @@
             <div class="form-group">
                 <label class="form-label">Term</label>
                 <select name="term" class="form-select">
-                    <option value="1252" {% if term == '1252' %}selected{% endif %}>Spring 2025</option>
+                    <option value="1262" {% if term == '1262' %}selected{% endif %}>Spring 2025</option>
+                    <option value="1258" {% if term == '1258' %}selected{% endif %}>Fall 2025</option>
+                    <option value="1252" {% if term == '1252' %}selected{% endif %}>Spring 2024</option>
                     <option value="1248" {% if term == '1248' %}selected{% endif %}>Fall 2024</option>
-                    <option value="1246" {% if term == '1246' %}selected{% endif %}>Summer 2024</option>
                 </select>
             </div>
             
@@ -59,10 +60,14 @@
     
     <div class="card-grid">
         {% for course in courses %}
-        <div class="course-card">
+        {% set course_key = (course.subject ~ ' ' ~ course.catalog_nbr, course.class_section) %}
+        {% set is_added = course_key in scheduled_keys %}
+        <div class="course-card{% if is_added %} course-added{% endif %}">
             <div class="course-header">
                 <span class="course-code">{{ course.subject }} {{ course.catalog_nbr }}</span>
-                {% if course.units %}
+                {% if is_added %}
+                <span class="badge-added">✓ Added</span>
+                {% elif course.units %}
                 <span class="course-credits">{{ course.units }} credits</span>
                 {% endif %}
             </div>
@@ -84,7 +89,7 @@
                 
                 {% if course.meetings and course.meetings[0].start_time %}
                 <span class="course-meta-item">
-                    🕐 {{ course.meetings[0].start_time }} - {{ course.meetings[0].end_time }}
+                    🕐 {{ course.meetings[0].start_time | format_time }} - {{ course.meetings[0].end_time | format_time }}
                 </span>
                 {% endif %}
                 
@@ -107,18 +112,29 @@
                     {% endif %}
                 {% endif %}
                 
+                {% if is_added %}
+                <!-- Already added - show remove option -->
+                <form action="/schedule/remove" method="post" style="margin: 0;">
+                    <input type="hidden" name="user_id" value="{{ user_id }}">
+                    <input type="hidden" name="course_id" value="{{ course.subject }} {{ course.catalog_nbr }}">
+                    <input type="hidden" name="section_id" value="{{ course.class_section }}">
+                    <button type="submit" class="btn btn-ghost btn-sm">✕ Remove</button>
+                </form>
+                {% else %}
                 <!-- Add to Schedule Form -->
                 <form action="/schedule/add" method="post" style="margin: 0;">
+                    <input type="hidden" name="user_id" value="{{ user_id }}">
                     <input type="hidden" name="course_id" value="{{ course.subject }} {{ course.catalog_nbr }}">
                     <input type="hidden" name="section_id" value="{{ course.class_section }}">
                     <input type="hidden" name="title" value="{{ course.descr }}">
                     <input type="hidden" name="days" value="{{ course.meetings[0].days if course.meetings else '' }}">
-                    <input type="hidden" name="start_time" value="{{ course.meetings[0].start_time if course.meetings else '' }}">
-                    <input type="hidden" name="end_time" value="{{ course.meetings[0].end_time if course.meetings else '' }}">
+                    <input type="hidden" name="start_time" value="{{ (course.meetings[0].start_time | format_time) if course.meetings else '' }}">
+                    <input type="hidden" name="end_time" value="{{ (course.meetings[0].end_time | format_time) if course.meetings else '' }}">
                     <input type="hidden" name="location" value="{{ course.meetings[0].facility_descr if course.meetings else '' }}">
                     <input type="hidden" name="instructor" value="{{ course.instructors[0].name if course.instructors else 'Staff' }}">
                     <button type="submit" class="btn btn-secondary btn-sm">+ Add</button>
                 </form>
+                {% endif %}
             </div>
         </div>
         {% endfor %}

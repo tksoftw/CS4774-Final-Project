@@ -56,21 +56,37 @@
                 {% for day in days %}
                 <div class="schedule-cell">
                     {% for item in calendar[day] %}
-                        {% set item_hour = item.start_time.split(':')[0] | int %}
-                        {% set slot_hour = time_slot.split(':')[0] | int %}
-                        {% if 'PM' in time_slot and slot_hour != 12 %}
-                            {% set slot_hour = slot_hour + 12 %}
+                        {# Extract hour from time slot (e.g., "9:00 AM" -> 9) #}
+                        {% set slot_parts = time_slot.split(':') %}
+                        {% set slot_hour = slot_parts[0] | int %}
+                        {% set slot_is_pm = 'PM' in time_slot %}
+                        {% if slot_is_pm and slot_hour != 12 %}
+                            {% set slot_hour_24 = slot_hour + 12 %}
+                        {% elif not slot_is_pm and slot_hour == 12 %}
+                            {% set slot_hour_24 = 0 %}
+                        {% else %}
+                            {% set slot_hour_24 = slot_hour %}
                         {% endif %}
-                        {% if 'AM' in item.start_time and item_hour == 12 %}
-                            {% set item_hour = 0 %}
-                        {% elif 'PM' in item.start_time and item_hour != 12 %}
-                            {% set item_hour = item_hour + 12 %}
-                        {% endif %}
-                        {% if item_hour == slot_hour %}
-                        <div class="schedule-item">
-                            <div class="schedule-item-title">{{ item.course_id }}</div>
-                            <div class="schedule-item-time">{{ item.start_time }} - {{ item.end_time }}</div>
-                        </div>
+                        
+                        {# Extract hour from item start time (e.g., "9:00 AM" -> 9) #}
+                        {% if item.start_time and ':' in item.start_time %}
+                            {% set item_parts = item.start_time.split(':') %}
+                            {% set item_hour = item_parts[0] | int %}
+                            {% set item_is_pm = 'PM' in item.start_time %}
+                            {% if item_is_pm and item_hour != 12 %}
+                                {% set item_hour_24 = item_hour + 12 %}
+                            {% elif not item_is_pm and item_hour == 12 %}
+                                {% set item_hour_24 = 0 %}
+                            {% else %}
+                                {% set item_hour_24 = item_hour %}
+                            {% endif %}
+                            
+                            {% if item_hour_24 == slot_hour_24 %}
+                            <div class="schedule-item">
+                                <div class="schedule-item-title">{{ item.course_id }}</div>
+                                <div class="schedule-item-time">{{ item.start_time }} - {{ item.end_time }}</div>
+                            </div>
+                            {% endif %}
                         {% endif %}
                     {% endfor %}
                 </div>

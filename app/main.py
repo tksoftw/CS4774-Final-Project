@@ -16,6 +16,36 @@ from app.data.indexer import CourseIndexer
 settings = get_settings()
 
 
+def format_sis_time(time_str: str) -> str:
+    """Format SIS time string to readable format.
+    
+    Converts "09.00.00.000000" to "9:00 AM", "14.30.00.000000" to "2:30 PM"
+    
+    Args:
+        time_str: Time string in format "HH.MM.SS.ffffff"
+        
+    Returns:
+        Formatted time string like "9:00 AM" or "2:30 PM"
+    """
+    if not time_str:
+        return ""
+    
+    try:
+        parts = time_str.split(".")
+        hour = int(parts[0])
+        minute = int(parts[1]) if len(parts) > 1 else 0
+        
+        period = "AM" if hour < 12 else "PM"
+        if hour == 0:
+            hour = 12
+        elif hour > 12:
+            hour -= 12
+        
+        return f"{hour}:{minute:02d} {period}"
+    except (ValueError, IndexError):
+        return time_str
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan handler."""
@@ -52,6 +82,9 @@ app.mount("/static", StaticFiles(directory=str(static_path)), name="static")
 # Setup templates
 templates_path = Path(__file__).parent.parent / "templates"
 templates = Jinja2Templates(directory=str(templates_path))
+
+# Add custom filters to templates
+templates.env.filters["format_time"] = format_sis_time
 
 # Include routers
 app.include_router(chat_router)

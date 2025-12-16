@@ -14,7 +14,7 @@
             </div>
             <form action="/chat/clear" method="post" style="margin: 0;">
                 <input type="hidden" name="session_id" value="{{ session_id }}">
-                <button type="submit" class="btn btn-ghost btn-sm">Clear Chat</button>
+                <!-- <button type="submit" class="btn btn-ghost btn-sm">🗑️ Clear</button> -->
             </form>
         </div>
         
@@ -44,7 +44,7 @@
                     <div class="chat-suggestions">
                         <button type="button" class="suggestion-chip" onclick="setMessage(this.textContent)">What are the required CS courses?</button>
                         <button type="button" class="suggestion-chip" onclick="setMessage(this.textContent)">Tell me about CS 4774</button>
-                        <button type="button" class="suggestion-chip" onclick="setMessage(this.textContent)">Who teaches Machine Learning?</button>
+                        <button type="button" class="suggestion-chip" onclick="setMessage(this.textContent)">Who teaches Discrete Math 2?</button>
                         <button type="button" class="suggestion-chip" onclick="setMessage(this.textContent)">What are the prereqs for DSA1?</button>
                     </div>
                 </div>
