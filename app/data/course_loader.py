@@ -335,18 +335,10 @@ class CourseLoader:
                 "class_number": str(course.get("class_nbr", "")),
                 "has_description": bool(hooslist_info.get("description")),
                 "has_prerequisites": bool(hooslist_info.get("prerequisites")),
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
                 "has_reviews": len(matched_reviews) > 0,
                 "review_count": len(matched_reviews),
-=======
                 "clusters": ",".join(clusters) if clusters else "",
                 "course_code": course_code,
->>>>>>> Stashed changes
-=======
-                "clusters": ",".join(clusters) if clusters else "",
-                "course_code": course_code,
->>>>>>> Stashed changes
             }
             
             documents.append(doc_text)
