@@ -5,6 +5,10 @@ from app.services.gemini_service import GeminiService
 from app.data.vector_store import VectorStore
 from app.config import get_cluster_summary
 
+# Module-level storage for RAG context (persists across RAGEngine instances)
+_last_context: dict[str, str] = {}
+_last_query: dict[str, str] = {}
+
 
 class RAGEngine:
     """RAG engine for course-aware AI responses."""
@@ -21,7 +25,18 @@ Guidelines:
 - Suggest courses based on student interests and requirements
 - Try to use markdown formatting to make the response more readable and visually appealing.
 - Courses may include lab/discussion sections which will be listed as 0 credits
-- Try to limit your responses to a length of around 1-2 paragraphs.
+
+IMPORTANT - Handling follow-up requests:
+- When user says "keep going", "more info", "tell me more", "continue", "yes", "elaborate", etc., provide ADDITIONAL details you haven't mentioned yet
+- Do NOT repeat information you already gave - provide NEW information like:
+  * Prerequisites and what they cover
+  * Related/similar courses they might also like
+  * Tips for success in the course
+  * How this course fits into degree requirements
+  * Comparison with similar courses
+  * What topics/projects students typically work on
+- Do NOT ask "what would you like to know?" - just provide more useful information
+- Remember the conversation context and what course/topic was being discussed
 
 When discussing a VERY specific question about a specific course, answer the question briefly and to the point.
  - For example, if the question is "Who teaches Discrete Math 1?", an appropriate response would be "Discrete Math 1 (CS 2120) is taught by [Name(s)]. <END RESPONSE>"
@@ -79,6 +94,14 @@ When discussing general course information (e.g. "What are some good courses to 
 {cluster_info}
 """
     
+    # Follow-up phrases that should reuse previous context
+    FOLLOWUP_PHRASES = [
+        "keep going", "continue", "more info", "tell me more", "more", "elaborate",
+        "go on", "yes", "yes please", "sure", "ok", "okay", "yeah", "yep",
+        "what else", "anything else", "more details", "explain more",
+        "and?", "so?", "then?", "more about", "keep talking",
+    ]
+    
     def __init__(self):
         self.gemini_service = GeminiService()
         self.vector_store = VectorStore()
@@ -87,6 +110,21 @@ When discussing general course information (e.g. "What are some good courses to 
         self.SYSTEM_PROMPT = self.SYSTEM_PROMPT_BASE.format(
             cluster_info=get_cluster_summary()
         )
+    
+    def _is_followup(self, question: str) -> bool:
+        """Check if a question is a follow-up request."""
+        q_lower = question.lower().strip()
+        # Check exact matches
+        if q_lower in self.FOLLOWUP_PHRASES:
+            return True
+        # Check if starts with follow-up phrase
+        for phrase in self.FOLLOWUP_PHRASES:
+            if q_lower.startswith(phrase):
+                return True
+        # Very short questions are likely follow-ups
+        if len(q_lower.split()) <= 3 and "?" not in q_lower:
+            return True
+        return False
 
     QUERY_PROMPT_TEMPLATE = """Use the following information to answer the student's question.
 
@@ -115,25 +153,42 @@ Provide a helpful, accurate response. For specific course details (instructors, 
         Returns:
             Dictionary with response and sources
         """
-        # Retrieve relevant documents
-        search_results = self.vector_store.search(query=question, n_results=n_results)
-        
-        # Format context from retrieved documents
-        context_parts = []
         sources = []
         
-        for i, doc in enumerate(search_results["documents"]):
-            if doc:
-                context_parts.append(f"[Source {i+1}]\n{doc}")
-                
-                # Extract source info from metadata
-                metadata = search_results["metadatas"][i] if search_results["metadatas"] else {}
-                if metadata:
-                    source_str = f"{metadata.get('subject', '')} {metadata.get('catalog_number', '')} - {metadata.get('title', '')}"
-                    sources.append(source_str)
+        # Check if this is a follow-up - reuse previous context if so
+        is_followup = session_id and self._is_followup(question) and session_id in _last_context
         
-        context = "\n\n".join(context_parts) if context_parts else "No specific course information found."
-        # Build the prompt with context + degree requirements
+        if is_followup:
+            # Reuse previous context for follow-up questions
+            context = _last_context[session_id]
+            # Enhance the question to make it clearer
+            original_q = _last_query.get(session_id, "")
+            question = f"(Follow-up to previous question about '{original_q}'): {question}"
+        else:
+            # New question - do fresh RAG retrieval
+            search_results = self.vector_store.search(query=question, n_results=n_results)
+            
+            # Format context from retrieved documents
+            context_parts = []
+            
+            for i, doc in enumerate(search_results["documents"]):
+                if doc:
+                    context_parts.append(f"[Source {i+1}]\n{doc}")
+                    
+                    # Extract source info from metadata
+                    metadata = search_results["metadatas"][i] if search_results["metadatas"] else {}
+                    if metadata:
+                        source_str = f"{metadata.get('subject', '')} {metadata.get('catalog_number', '')} - {metadata.get('title', '')}"
+                        sources.append(source_str)
+            
+            context = "\n\n".join(context_parts) if context_parts else "No specific course information found."
+            
+            # Store context for potential follow-ups
+            if session_id:
+                _last_context[session_id] = context
+                _last_query[session_id] = question
+        
+        # Build the prompt with context
         user_prompt = self.QUERY_PROMPT_TEMPLATE.format(
             context=context,
             question=question,
@@ -173,6 +228,11 @@ Provide a helpful, accurate response. For specific course details (instructors, 
         Returns:
             True if cleared, False if didn't exist
         """
+        # Clear context cache
+        if session_id in _last_context:
+            del _last_context[session_id]
+        if session_id in _last_query:
+            del _last_query[session_id]
         return self.gemini_service.clear_chat_session(session_id)
     
     def query_stream(
