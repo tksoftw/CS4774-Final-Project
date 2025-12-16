@@ -20,8 +20,8 @@ COURSE_CLUSTERS: dict[str, list[str]] = {
         "CS 2100",  # Data Structures and Algorithms 1
     ],
 
-    # Required CS courses in the major (20 credits total)
-    "cs_required_courses": [
+    # Required CS courses in the major (20 credits total) - HIGH PRIORITY
+    "CS_REQUIRED_COURSES": [
         "CS 2120",  # Discrete Mathematics and Theory 1
         "CS 2130",  # Computer Systems and Organization 1
         "CS 3100",  # Data Structures and Algorithms 2
@@ -71,13 +71,20 @@ COURSE_CLUSTERS: dict[str, list[str]] = {
 
 CLUSTER_DESCRIPTIONS: dict[str, str] = {
     "cs_prerequisites": "Prereqs to declare the CS BA/BS major: one intro programming course (CS 1110/1111/1112/1113) + CS 2100.",
-    "cs_required_courses": "Required CS major courses (20 credits): discrete I/II, systems I/II, DSA2, software dev essentials.",
+    "CS_REQUIRED_COURSES": "REQUIRED CS MAJOR COURSES (20 credits): CS 2120 Discrete Math I, CS 2130 Systems I, CS 3100 DSA2, CS 3120 Discrete Math II, CS 3130 Systems II, CS 3140 Software Dev Essentials.",
     "cs_restricted_electives": "Pick 3 (9 credits) from the prescribed CS restricted-elective list (CS 4993 counts for at most 3 credits).",
     "cs_integration_electives": "Pick 12 credits of approved non-CS integration electives (College of Arts & Sciences list in the catalog).",
     "cs_distinguished_majors": "Thesis/research course for Distinguished Majors (CS 4998 taken for two semesters).",
 }
 
-
+# Cluster weights - how many times to repeat cluster info in embeddings
+# Higher = more weight in semantic search
+CLUSTER_WEIGHTS: dict[str, int] = {
+    "CS_REQUIRED_COURSES": 5,  # HIGH priority - required courses
+    "cs_prerequisites": 2,
+    "cs_restricted_electives": 2,
+    "cs_distinguished_majors": 1,
+}
 
 def get_course_clusters(course_code: str) -> list[str]:
     """Get all clusters that a course belongs to.
