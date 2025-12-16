@@ -35,7 +35,7 @@ class GeminiService:
         """
         # Combine system prompt and user prompt
         full_prompt = prompt
-        # print(full_prompt)
+        print(full_prompt)
         if system_prompt:
             full_prompt = f"{system_prompt}\n\n{prompt}"
         
