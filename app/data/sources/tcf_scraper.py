@@ -1,179 +1,179 @@
-"""TheCourseForum scraper for instructor reviews and ratings.
-
-Scrapes instructor ratings, difficulty scores, and GPA data from TheCourseForum.
-"""
-
 import requests
 from bs4 import BeautifulSoup
-from typing import Optional
 
-from app.data.stores import TCFStore
+BASE_URL = "https://thecourseforum.com/course"
+API_BASE_URL = "https://thecourseforum.com/api/courses"
 
+HEADERS = {
+    "User-Agent": "UVA-Course-Advising-Project/1.0 (academic use)"
+}
 
-class TCFScraper:
-    """Scraper for TheCourseForum instructor data with caching."""
-    
-    BASE_URL = "https://thecourseforum.com/course"
-    
-    HEADERS = {
-        "User-Agent": "UVA-Course-Advising-Project/1.0 (academic use)"
-    }
-    
-    def __init__(self, timeout: float = 10.0, cache_dir: str = "app/data/cache"):
-        self.timeout = timeout
-        self.store = TCFStore(cache_dir)
-    
-    def get_course_reviews(
-        self, 
-        subject: str, 
-        catalog_number: str,
-        use_cache: bool = True,
-    ) -> list[dict]:
-        """Get all instructor reviews for a course with caching.
-        
-        Args:
-            subject: Subject code (e.g., "CS")
-            catalog_number: Course number (e.g., "4774")
-            use_cache: Whether to use cached data if available
-            
-        Returns:
-            List of instructor review dictionaries
-        """
-        # Check cache first
-        if use_cache and self.store.has(subject, catalog_number):
-            return self.store.load(subject, catalog_number)
-        
-        # Fetch from web
-        url = f"{self.BASE_URL}/{subject}/{catalog_number}/All"
-        reviews = self._scrape_course(url)
-        
-        # Save to cache
-        self.store.save(subject, catalog_number, reviews)
-        
-        return reviews
-    
-    def _scrape_course(self, url: str) -> list[dict]:
-        """Scrape course reviews from a TCF URL.
-        
-        Args:
-            url: Full URL to the course page
-            
-        Returns:
-            List of instructor review dictionaries
-        """
-        try:
-            soup = self._fetch_page(url)
-            instructors = []
-            
-            for li in self._get_instructor_cards(soup):
-                data = self._parse_instructor(li)
-                if data["instructor_name"]:
-                    instructors.append(data)
-            
-            return instructors
-        except Exception:
-            return []
-    
-    def _fetch_page(self, url: str) -> BeautifulSoup:
-        """Fetch and parse a page.
-        
-        Args:
-            url: URL to fetch
-            
-        Returns:
-            BeautifulSoup object
-        """
-        resp = requests.get(url, headers=self.HEADERS, timeout=self.timeout)
-        resp.raise_for_status()
-        return BeautifulSoup(resp.text, "html.parser")
-    
-    def _get_instructor_cards(self, soup: BeautifulSoup) -> list:
-        """Extract instructor card elements from page.
-        
-        Args:
-            soup: Parsed page
-            
-        Returns:
-            List of instructor list item elements
-        """
-        ul = soup.find("ul", class_="instructor-list")
-        if not ul:
-            return []
-        return ul.find_all("li", class_="instructor")
-    
-    def _parse_instructor(self, li) -> dict:
-        """Parse instructor data from a list item element.
-        
-        Args:
-            li: BeautifulSoup list item element
-            
-        Returns:
-            Dictionary with instructor data
-        """
-        def safe_text(el):
-            return el.get_text(strip=True) if el else None
-        
-        # Name
-        name = safe_text(li.find("h3", id="title"))
-        
-        # Profile link
-        a_tag = li.find("a", href=True)
-        profile_url = f"https://thecourseforum.com{a_tag['href']}" if a_tag else None
-        
-        # Stats
-        rating = safe_text(li.find("p", id="rating"))
-        difficulty = safe_text(li.find("p", id="difficulty"))
-        gpa = safe_text(li.find("p", id="gpa"))
-        
-        return {
-            "instructor_name": name,
-            "profile_url": profile_url,
-            "rating": rating if rating else None,
-            "difficulty": difficulty if difficulty else None,
-            "gpa": gpa if gpa else None,
-        }
-    
-    def fetch_batch(
-        self,
-        courses: list[tuple[str, str]],
-        on_progress: callable = None,
-        use_cache: bool = True,
-    ) -> dict:
-        """Fetch reviews for multiple courses with caching.
-        
-        Args:
-            courses: List of (subject, catalog_number) tuples
-            on_progress: Optional callback(index, total, subject, catalog_number, success)
-            use_cache: Whether to use cached data if available
-            
-        Returns:
-            Dictionary mapping "SUBJECT_CATALOG" to reviews list
-        """
-        reviews_map = {}
-        total = len(courses)
-        
-        for idx, (subject, catalog_number) in enumerate(courses, 1):
-            key = f"{subject}_{catalog_number}"
-            reviews = self.get_course_reviews(subject, catalog_number, use_cache)
-            reviews_map[key] = reviews
-            
-            if on_progress:
-                on_progress(idx, total, subject, catalog_number, len(reviews) > 0)
-        
-        return reviews_map
+def fetch_course_page(url: str) -> BeautifulSoup:
+    resp = requests.get(url, headers=HEADERS, timeout=10)
+    resp.raise_for_status()
+    return BeautifulSoup(resp.text, "html.parser")
 
-
-# Backwards compatibility - expose as module-level function
-BASE_URL = TCFScraper.BASE_URL
-
-def scrape_course(course_url: str) -> list[dict]:
-    """Legacy function for backwards compatibility.
+def fetch_course_stats(course_id: int) -> dict:
+    """Fetch course statistics from TheCourseForum API.
     
     Args:
-        course_url: URL like "https://thecourseforum.com/course/CS/4774/"
+        course_id: TheCourseForum course ID
         
     Returns:
-        List of instructor review dictionaries
+        Dictionary with course statistics, or empty dict if not found
     """
-    scraper = TCFScraper()
-    return scraper._scrape_course(course_url)
+    url = f"{API_BASE_URL}/{course_id}/?allstats=&format=json"
+    try:
+        resp = requests.get(url, headers=HEADERS, timeout=10)
+        resp.raise_for_status()
+        return resp.json()
+    except Exception as e:
+        print(f"Warning: Could not fetch stats for course {course_id}: {e}")
+        return {}
+
+def extract_course_id_from_page(soup: BeautifulSoup) -> int:
+    """Extract course ID from the course page HTML.
+    
+    The course ID appears in instructor profile links like /course/15226/605/
+    """
+    # Look for instructor links in the format /course/{course_id}/{instructor_id}/
+    instructor_list = soup.find("ul", class_="instructor-list")
+    if instructor_list:
+        link = instructor_list.find("a", href=True)
+        if link:
+            import re
+            # Match pattern like /course/15226/605/
+            match = re.search(r'/course/(\d+)/\d+/', link['href'])
+            if match:
+                return int(match.group(1))
+    
+    # Fallback: try to find it in script tags
+    scripts = soup.find_all('script')
+    for script in scripts:
+        if script.string and '/api/courses/' in script.string:
+            import re
+            match = re.search(r'/api/courses/(\d+)/', script.string)
+            if match:
+                return int(match.group(1))
+    
+    return None
+
+def get_instructor_cards(soup: BeautifulSoup):
+    ul = soup.find("ul", class_="instructor-list")
+    if not ul:
+        return []
+    return ul.find_all("li", class_="instructor")
+
+def safe_text(el):
+    return el.get_text(strip=True) if el else None
+
+def parse_instructor(li):
+    # Name
+    name = safe_text(li.find("h3", id="title"))
+
+    # Profile link (contains instructor ID)
+    a_tag = li.find("a", href=True)
+    profile_url = f"https://thecourseforum.com{a_tag['href']}" if a_tag else None
+
+    # Stats
+    rating = safe_text(li.find("p", id="rating"))
+    difficulty = safe_text(li.find("p", id="difficulty"))
+    gpa = safe_text(li.find("p", id="gpa"))
+
+    return {
+        "instructor_name": name,
+        "profile_url": profile_url,
+        "rating": rating if rating else None,
+        "difficulty": difficulty if difficulty else None,
+        "gpa": gpa if gpa else None,
+    }
+
+def process_course_stats(stats: dict) -> dict:
+    """Process raw course stats into a cleaner format with grade distributions.
+    
+    Args:
+        stats: Raw stats dictionary from API
+        
+    Returns:
+        Processed stats with calculated grade percentages
+    """
+    if not stats:
+        return None
+    
+    # Extract the fields we care about
+    processed = {
+        "average_rating": stats.get("average_rating"),
+        "average_instructor": stats.get("average_instructor"),
+        "average_fun": stats.get("average_fun"),
+        "average_recommendability": stats.get("average_recommendability"),
+        "average_difficulty": stats.get("average_difficulty"),
+        "average_hours_per_week": stats.get("average_hours_per_week"),
+        "average_amount_reading": stats.get("average_amount_reading"),
+        "average_amount_writing": stats.get("average_amount_writing"),
+        "average_amount_group": stats.get("average_amount_group"),
+        "average_amount_homework": stats.get("average_amount_homework"),
+        "average_gpa": stats.get("average_gpa"),
+        "total_enrolled": stats.get("total_enrolled", 0),
+    }
+    
+    # Calculate grade distribution percentages
+    total = stats.get("total_enrolled", 0)
+    if total > 0:
+        processed["grade_distribution"] = {
+            "A+": round((stats.get("a_plus", 0) / total) * 100, 1),
+            "A": round((stats.get("a", 0) / total) * 100, 1),
+            "A-": round((stats.get("a_minus", 0) / total) * 100, 1),
+            "B+": round((stats.get("b_plus", 0) / total) * 100, 1),
+            "B": round((stats.get("b", 0) / total) * 100, 1),
+            "B-": round((stats.get("b_minus", 0) / total) * 100, 1),
+            "C+": round((stats.get("c_plus", 0) / total) * 100, 1),
+            "C": round((stats.get("c", 0) / total) * 100, 1),
+            "C-": round((stats.get("c_minus", 0) / total) * 100, 1),
+            "D/F/W": round((stats.get("dfw", 0) / total) * 100, 1),
+        }
+    else:
+        processed["grade_distribution"] = None
+    
+    return processed
+
+def scrape_course(course_url: str):
+    """Scrape course reviews and statistics from TheCourseForum.
+    
+    Automatically appends '/All' to get all historical instructor data.
+    Also fetches course-level statistics from the API.
+    
+    Args:
+        course_url: URL like "https://thecourseforum.com/course/CS/4774/" 
+                   or just the path portion
+    
+    Returns:
+        Dictionary with:
+        - instructors: List of instructor review dictionaries
+        - course_stats: Processed course-level statistics
+    """
+    # Ensure we're using the /All endpoint
+    if not course_url.endswith('/'):
+        course_url += '/'
+    if not course_url.endswith('/All'):
+        course_url += 'All'
+    
+    soup = fetch_course_page(course_url)
+    
+    # Get instructor reviews
+    instructors = []
+    for li in get_instructor_cards(soup):
+        data = parse_instructor(li)
+        if data["instructor_name"]:
+            instructors.append(data)
+    
+    # Try to get course ID and fetch stats
+    course_stats = None
+    course_id = extract_course_id_from_page(soup)
+    if course_id:
+        raw_stats = fetch_course_stats(course_id)
+        course_stats = process_course_stats(raw_stats)
+    
+    return {
+        "instructors": instructors,
+        "course_stats": course_stats,
+    }
