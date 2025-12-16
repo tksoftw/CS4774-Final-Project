@@ -1,0 +1,13 @@
+Subject: CS 1110
+Title: Introduction to Programming
+Title: Introduction to Programming
+Description: A first course in programming, software development, and computer science.  Introduces computing fundamentals and an appreciation for computational thinking.  No previous programming experience required.  Note: CS 1110, 1111, 1112, 1113, and 1120 provide different approaches to teaching the same core material; students may only receive credit for one of these courses. Students may not enroll if CS 2100 or CS 3140 has been completed.
+Description: A first course in programming, software development, and computer science.  Introduces computing fundamentals and an appreciation for computational thinking.  No previous programming experience required.  Note: CS 1110, 1111, 1112, 1113, and 1120 provide different approaches to teaching the same core material; students may only receive credit for one of these courses. Students may not enroll if CS 2100 or CS 3140 has been completed.
+Description: A first course in programming, software development, and computer science.  Introduces computing fundamentals and an appreciation for computational thinking.  No previous programming experience required.  Note: CS 1110, 1111, 1112, 1113, and 1120 provide different approaches to teaching the same core material; students may only receive credit for one of these courses. Students may not enroll if CS 2100 or CS 3140 has been completed.
+Cluster: cs_core_foundation - Core CS courses required for all majors (programming, data structures, theory)
+Cluster: cs_core_foundation - Core CS courses required for all majors (programming, data structures, theory)
+Credits: 3
+Enrollment: 149/250
+
+Reviews (1 instructors):
+  Arohi Khargonkar | Rating: 3.63/5 | Difficulty: 3.00/5 | Avg GPA: 3.31
