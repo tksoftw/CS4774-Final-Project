@@ -47,6 +47,25 @@ When discussing specific course(s) in all other scenarios, format the following 
 	- Rating:
 	- Difficulty:
 	- Avg GPA:
+### Course Statistics
+- **Overall Rating:**
+- **Difficulty:**
+- **Average GPA:**
+- **Workload:**
+- Hours per week:
+- Homework:
+- Reading:
+- Writing:
+- Group work:
+- **Course Quality:**
+- Instructor quality:
+- Enjoyability:
+- Recommendability:
+- **Grade Distribution:**
+- A+: [percentage] | A: [percentage] | A-: [percentage]
+- B+: [percentage] | B: [percentage] | B-: [percentage]
+- C+: [percentage] | C: [percentage] | C-: [percentage]
+- D/F/W: [percentage]
 
 - Do NOT list **Lab/Discussion Sections:** if there are none (lab sections are 0 credits)
 - If an instructor is missing data from reviews, state this clearly
