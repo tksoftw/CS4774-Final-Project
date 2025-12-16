@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
     <div class="flex justify-between items-center mb-3">
-        <h1>📅 My Schedule</h1>
+        <div class="bodoni" style="font-size: 2.5rem;">My Schedule</div>
         {% if schedule %}
         <form action="/schedule/clear" method="post" style="margin: 0;">
             <input type="hidden" name="user_id" value="{{ user_id }}">
@@ -84,7 +84,7 @@
         <div class="empty-icon">📅</div>
         <h3 class="empty-title">Your schedule is empty</h3>
         <p class="empty-desc">Browse courses and add them to your schedule to see them here.</p>
-        <a href="/courses" class="btn btn-primary mt-3">📚 Browse Courses</a>
+        <a href="/courses" class="btn btn-primary mt-3">Browse Courses</a>
     </div>
     {% endif %}
 </div>

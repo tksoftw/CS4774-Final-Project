@@ -199,12 +199,11 @@ a:hover {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-bottom: 1rem;
 }
 
 .hero-subtitle {
     font-size: 1.25rem;
-    color: var(--text-secondary);
+    color: var(--text-primary);
     max-width: 600px;
     margin: 0 auto 2rem;
 }
@@ -214,6 +213,24 @@ a:hover {
     gap: 1rem;
     justify-content: center;
     flex-wrap: wrap;
+}
+
+.hero-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/static/images/uva.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.25;
+    z-index: 0;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
 }
 
 /* ===== Buttons ===== */
@@ -332,13 +349,6 @@ a:hover {
     border-radius: 12px;
     padding: 2rem;
     text-align: center;
-    transition: all var(--transition-normal);
-}
-
-.feature-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--uva-orange);
-    box-shadow: var(--shadow-lg);
 }
 
 .feature-icon {
@@ -919,3 +929,11 @@ a:hover {
     background: var(--bg-tertiary);
 }
 
+.bodoni {
+    font-family: "Libre Bodoni", "Bodoni MT", serif;
+}
+
+.bodoni-italic {
+    font-family: "Libre Bodoni", "Bodoni MT", serif;
+    font-style: italic;
+}

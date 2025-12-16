@@ -6,15 +6,14 @@
         <!-- Chat Header -->
         <div class="card-header" style="margin: 0; padding: 1rem 1.5rem; border-radius: 12px 12px 0 0;">
             <div class="flex items-center gap-2">
-                <span style="font-size: 1.5rem;">🤖</span>
                 <div>
-                    <h3 class="card-title">Course Assistant</h3>
-                    <p class="text-muted" style="font-size: 0.875rem;">Ask me anything about UVA courses</p>
+                    <h3 class="card-title">HoosAdvisor</h3>
+                    <p class="text-muted" style="font-size: 0.875rem;">Ask me anything about UVA courses!</p>
                 </div>
             </div>
             <form action="/chat/clear" method="post" style="margin: 0;">
                 <input type="hidden" name="session_id" value="{{ session_id }}">
-                <button type="submit" class="btn btn-ghost btn-sm">🗑️ Clear</button>
+                <button type="submit" class="btn btn-ghost btn-sm">Clear Chat</button>
             </form>
         </div>
         

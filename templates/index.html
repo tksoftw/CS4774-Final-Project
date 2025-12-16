@@ -3,17 +3,19 @@
 {% block content %}
 <!-- Hero Section -->
 <section class="hero">
-    <div class="container">
-        <h1 class="hero-title">Your AI Academic Advisor</h1>
+    <div class="hero-image"></div>
+    <div class="container hero-content">
+        <h1 class="hero-title">Your UVA AI</h1>
+        <div class="hero-title bodoni-italic" style="font-size: 5rem;">Academic Advisor</div>
         <p class="hero-subtitle">
             Get personalized course recommendations, build your schedule, and plan your academic journey at UVA — all in one place.
         </p>
         <div class="hero-actions">
             <a href="/chat" class="btn btn-primary">
-                💬 Start Chatting
+                Start Chatting
             </a>
             <a href="/courses" class="btn btn-secondary">
-                📚 Browse Courses
+                Browse Courses
             </a>
         </div>
     </div>
@@ -83,21 +85,29 @@
 <!-- Data Sources Section -->
 <section class="features" style="background: var(--bg-secondary); padding: 3rem 0; margin-top: 2rem;">
     <div class="container">
-        <h2 class="text-center mb-4">Powered By Real Data</h2>
+        <div class="text-center mb-4 bodoni-italic" style="font-size: 2.5rem;">Powered By Real Data</div>
         <div class="features-grid">
-            <div class="card">
-                <h4>📊 SIS API</h4>
-                <p class="mt-1">Live course data, sections, enrollment, and schedules from UVA's Student Information System.</p>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3 class="feature-title">SIS API</h3>
+                <p class="feature-desc">
+                    Live course data, sections, enrollment, and schedules from UVA's Student Information System.
+                </p>
             </div>
-            <div class="card">
-                <h4>⭐ RateMyProfessor</h4>
-                <p class="mt-1">Professor ratings and reviews to help you choose the best instructors. <em class="text-muted">(Coming Soon)</em></p>
+            <div class="feature-card">
+                <div class="feature-icon">⭐</div>
+                <h3 class="feature-title">TheCourseForum + RateMyProfessor</h3>
+                <p class="feature-desc">
+                    Professor ratings and reviews to help you choose the best instructors.
+                </p>
             </div>
-            <div class="card">
-                <h4>📈 HoosList</h4>
-                <p class="mt-1">Historical grade distributions and enrollment trends. <em class="text-muted">(Coming Soon)</em></p>
+            <div class="feature-card">
+                <div class="feature-icon">📈</div>
+                <h3 class="feature-title">HoosList</h3>
+                <p class="feature-desc">
+                    Data-driven views of course offerings, schedules, and historical enrollment information.
+                </p>
             </div>
-        </div>
     </div>
 </section>
 {% endblock %}
