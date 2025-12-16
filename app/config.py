@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     
     # Gemini
     gemini_api_key: str = ""
-    gemini_model: str = "gemini-2.0-flash"
+    gemini_model: str = "gemini-2.5-flash-lite"
     gemini_embedding_model: str = "models/gemini-embedding-001"  # Best: up to 3072 dims, multilingual
     
     # Vector Database

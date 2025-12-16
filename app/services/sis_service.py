@@ -241,6 +241,41 @@ class SISService:
             return instructors[0].get("name", "Staff")
         return "Staff"
     
+    def _format_time(self, time_str: str) -> str:
+        """Format time string from SIS API to readable format.
+        
+        Converts "09.00.00.000000" to "9:00am", "14.30.00.000000" to "2:30pm"
+        
+        Args:
+            time_str: Time string in format "HH.MM.SS.ffffff"
+            
+        Returns:
+            Formatted time string like "9:00am" or "2:30pm"
+        """
+        if not time_str:
+            return ""
+        
+        try:
+            # Parse "HH.MM.SS.ffffff" format
+            parts = time_str.split(".")
+            hour = int(parts[0])
+            minute = int(parts[1]) if len(parts) > 1 else 0
+            
+            # Convert to 12-hour format
+            period = "am" if hour < 12 else "pm"
+            if hour == 0:
+                hour = 12
+            elif hour > 12:
+                hour -= 12
+            
+            # Format with or without minutes
+            if minute == 0:
+                return f"{hour}{period}"
+            else:
+                return f"{hour}:{minute:02d}{period}"
+        except (ValueError, IndexError):
+            return time_str  # Return original if parsing fails
+    
     def get_course_document(self, cls: dict, hooslist_info: dict = None) -> str:
         """Convert course data to text document for RAG.
         
@@ -276,7 +311,9 @@ class SISService:
             if meeting.get("days"):
                 parts.append(f"Days: {meeting.get('days', '')}")
             if meeting.get("start_time") and meeting.get("end_time"):
-                parts.append(f"Time: {meeting.get('start_time', '')} - {meeting.get('end_time', '')}")
+                start = self._format_time(meeting.get("start_time", ""))
+                end = self._format_time(meeting.get("end_time", ""))
+                parts.append(f"Time: {start} - {end}")
             if meeting.get("facility_descr"):
                 parts.append(f"Location: {meeting.get('facility_descr', '')}")
         

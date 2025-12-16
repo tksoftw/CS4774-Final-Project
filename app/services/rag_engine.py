@@ -18,14 +18,17 @@ Guidelines:
 - Focus on UVA-specific information when available
 - Help students understand prerequisites, course content, and scheduling
 - Suggest courses based on student interests and requirements
-- Do not use emojis, bold, or italic text in your responses.
+- Try to use markdown formatting to make the response more readable and visually appealing.
 
-When discussing courses, include relevant details like:
+When discussing specific course(s), include relevant details like:
 - Course title and number
 - Credits
 - Meeting times and days (if available)
 - Instructor (if available)
 - Prerequisites (if relevant)
+
+When discussing general course information (e.g. "What are some good courses to take?"), limit relevant details to:
+- Course title ONLY
 """
 
     QUERY_PROMPT_TEMPLATE = """Use the following course information to answer the student's question.
@@ -97,6 +100,47 @@ Provide a helpful, accurate response based on the course information above. If t
             "sources": sources,
             "context_used": len(context_parts),
         }
+    
+    def query_stream(
+        self,
+        question: str,
+        n_results: int = 10,
+    ):
+        """Process a user query with RAG and stream the response.
+        
+        Args:
+            question: User's question
+            n_results: Number of documents to retrieve
+            
+        Yields:
+            Text chunks as they are generated
+        """
+        # Retrieve relevant documents
+        search_results = self.vector_store.search(query=question, n_results=n_results)
+        
+        # Format context from retrieved documents
+        context_parts = []
+        
+        for i, doc in enumerate(search_results["documents"]):
+            if doc:
+                context_parts.append(f"[Source {i+1}]\n{doc}")
+        
+        context = "\n\n".join(context_parts) if context_parts else "No specific course information found."
+        
+        # Build the prompt
+        user_prompt = self.QUERY_PROMPT_TEMPLATE.format(
+            context=context,
+            question=question,
+        )
+        
+        # Stream response from Gemini
+        for chunk in self.gemini_service.get_completion_stream(
+            prompt=user_prompt,
+            system_prompt=self.SYSTEM_PROMPT,
+            temperature=0.7,
+            max_tokens=1000,
+        ):
+            yield chunk
     
     def simple_query(self, question: str) -> str:
         """Simple query without RAG (for general questions).
