@@ -1,16 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container">
-    <div class="flex justify-between items-center mb-3">
-        <div class="bodoni" style="font-size: 2.5rem;">My Schedule</div>
-        {% if schedule %}
-        <form action="/schedule/clear" method="post" style="margin: 0;">
-            <input type="hidden" name="user_id" value="{{ user_id }}">
-            <button type="submit" class="btn btn-danger btn-sm">🗑️ Clear All</button>
-        </form>
-        {% endif %}
-    </div>
+<div class="nav-offset">
+    <div class="container">
+        <div class="flex justify-between items-center mb-3">
+            <div class="bodoni" style="font-size: 2.5rem;">My Schedule</div>
+            {% if schedule %}
+            <form action="/schedule/clear" method="post" style="margin: 0;">
+                <input type="hidden" name="user_id" value="{{ user_id }}">
+                <button type="submit" class="btn btn-danger btn-sm">🗑️ Clear All</button>
+            </form>
+            {% endif %}
+        </div>
     
     {% if schedule %}
     <!-- Schedule Summary -->
@@ -87,6 +88,7 @@
         <a href="/courses" class="btn btn-primary mt-3">Browse Courses</a>
     </div>
     {% endif %}
+</div>
 </div>
 {% endblock %}
 
