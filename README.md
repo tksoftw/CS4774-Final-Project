@@ -86,9 +86,10 @@ The repository includes pre-cached data files for RateMyProfessor and CourseForu
 
 ```bash
 # Build RateMyProfessors cache (takes a while)
-python scripts/build_rmp_cache.py
+python -m app.scripts.build_rmp_cache
 
-# TCF instructor reviews are already cached in app/data/cache/tcf_instructor_reviews.json
+# Build TheCourseForum instructor reviews cache (also takes a while)
+python -m app.scripts.tcf_reviews_json_generator
 ```
 
 ## Usage
@@ -99,7 +100,7 @@ python scripts/build_rmp_cache.py
 python -m uvicorn app.main:app --reload
 ```
 
-### 2 Index course data (first time only)
+### 2. Index course data (first time only)
 
 Visit http://localhost:8000/admin/index and click **"Run Indexing"**
 
