@@ -129,7 +129,7 @@ async def courses_page(
             "page": page,
             "total_count": total_count,
             "error_message": error_message,
-            "title": "Courses - UVA Course Assistant",
+            "title": "Courses - HoosAdvisor",
             "subjects": get_common_subjects(),
             "scheduled_keys": scheduled_keys,
             "from_cache": from_cache,

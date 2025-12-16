@@ -50,7 +50,7 @@ def format_sis_time(time_str: str) -> str:
 async def lifespan(app: FastAPI):
     """Application lifespan handler."""
     # Startup: Initialize data if needed
-    print("Starting UVA AI Course Assistant...")
+    print("Starting HoosAdvisor...")
     
     # Check if we have indexed data
     try:
@@ -99,7 +99,7 @@ async def home(request: Request):
         "index.html",
         {
             "request": request,
-            "title": "UVA AI Course Assistant",
+            "title": "HoosAdvisor",
         }
     )
 

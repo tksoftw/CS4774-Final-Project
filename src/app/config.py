@@ -136,7 +136,7 @@ class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
     
     # App Settings
-    app_title: str = "UVA AI Course Assistant"
+    app_title: str = "HoosAdvisor Assistant"
     debug: bool = False
     
     # Gemini

@@ -1,4 +1,4 @@
-"""UVA AI Course Assistant - RAG Application"""
+"""HoosAdvisor - RAG Application"""
 
 __version__ = "0.1.0"
 

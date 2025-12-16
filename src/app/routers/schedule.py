@@ -57,7 +57,7 @@ async def schedule_page(request: Request, user_id: str = "default"):
             "user_id": user_id,
             "schedule": schedule,
             "calendar": calendar,
-            "title": "Schedule - UVA Course Assistant",
+            "title": "Schedule - HoosAdvisor",
             "time_slots": generate_time_slots(),
             "days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
         }

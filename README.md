@@ -8,6 +8,8 @@
 
 ## Overview
 
+![HoosAdvisor Homepage](src/static/images/homepage.png)
+
 A Retrieval-Augmented Generation (RAG) application that consolidates UVA course information from multiple sources into a single, intelligent AI assistant. Students can:
 
 - **Chat with an AI advisor** that has access to real course data, instructor reviews, and prerequisites

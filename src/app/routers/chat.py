@@ -47,7 +47,7 @@ async def chat_page(request: Request, session_id: str = None):
             "request": request,
             "session_id": session_id,
             "messages": messages,
-            "title": "Chat - UVA Course Assistant",
+            "title": "Chat - HoosAdvisor",
         }
     )
 
@@ -100,7 +100,7 @@ async def send_message(
             "request": request,
             "session_id": session_id,
             "messages": messages,
-            "title": "Chat - UVA Course Assistant",
+            "title": "Chat - HoosAdvisor",
         }
     )
 
