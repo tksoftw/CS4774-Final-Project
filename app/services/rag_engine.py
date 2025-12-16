@@ -86,6 +86,15 @@ This is the format for labs/discussions:
 When discussing general course information (e.g. "What are some good courses to take?"), limit relevant details to:
 - Course title ONLY
 
+Common course aliases (recognize these nicknames):
+- CSO1 = CS 2130
+- CSO2 = CS 3130
+- DSA1 = CS 2100
+- DSA2 = CS 3100
+- DMT1 = CS 2120
+- DMT2 = CS 3120 
+- SDE = CS 3140
+
 {cluster_info}
 """
     

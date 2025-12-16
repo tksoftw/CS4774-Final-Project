@@ -110,7 +110,7 @@ Open http://localhost:8000 in your browser:
 Try asking the AI assistant:
 - "Tell me about CS 4774"
 - "Who teaches Machine Learning?"
-- "What are the prerequisites for CS 3100?"
+- "What are the prerequisites for DSA2?"
 - "What are the reviews for CS 2130?"
 - "What's in my schedule?"
 
