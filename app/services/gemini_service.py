@@ -33,9 +33,9 @@ class GeminiService:
         Returns:
             The assistant's response text
         """
-        print(prompt)
         # Combine system prompt and user prompt
         full_prompt = prompt
+        print(prompt)
         if system_prompt:
             full_prompt = f"{system_prompt}\n\n{prompt}"
         
@@ -50,6 +50,44 @@ class GeminiService:
         )
         
         return response.text
+    
+    def get_completion_stream(
+        self,
+        prompt: str,
+        system_prompt: Optional[str] = None,
+        temperature: float = 0.7,
+        max_tokens: int = 1000,
+    ):
+        """Get a streaming chat completion from Gemini.
+        
+        Args:
+            prompt: The user's prompt/question
+            system_prompt: Optional system instructions
+            temperature: Creativity level (0-1)
+            max_tokens: Maximum response length
+            
+        Yields:
+            Text chunks as they are generated
+        """
+        # Combine system prompt and user prompt
+        full_prompt = prompt
+        if system_prompt:
+            full_prompt = f"{system_prompt}\n\n{prompt}"
+        
+        generation_config = genai.GenerationConfig(
+            temperature=temperature,
+            max_output_tokens=max_tokens,
+        )
+        
+        response = self.model.generate_content(
+            full_prompt,
+            generation_config=generation_config,
+            stream=True,
+        )
+        
+        for chunk in response:
+            if chunk.text:
+                yield chunk.text
     
     def get_embedding(self, text: str, task_type: str = "retrieval_document") -> list[float]:
         """Get embedding vector for text.

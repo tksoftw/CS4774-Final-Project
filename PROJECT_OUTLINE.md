@@ -15,8 +15,9 @@ A Retrieval-Augmented Generation (RAG) application that consolidates UVA course 
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        Frontend (HTML/CSS)                       │
+│                        Frontend (HTML/CSS/JS)                    │
 │                    Jinja2 Templates + FastAPI                    │
+│              Markdown rendering + async fetch API                │
 └─────────────────────────────────────────────────────────────────┘
                                  │
                                  ▼
@@ -24,16 +25,16 @@ A Retrieval-Augmented Generation (RAG) application that consolidates UVA course 
 │                      FastAPI Backend (Python)                    │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────────┐  │
 │  │   Routes    │  │   RAG       │  │   Data Connectors       │  │
-│  │   /chat     │  │   Engine    │  │   - SIS API             │  │
-│  │   /courses  │  │   + OpenAI  │  │   - RMP (TODO)          │  │
-│  │   /schedule │  │             │  │   - HoosList (TODO)     │  │
+│  │   /chat     │  │   Engine    │  │   - SIS API ✅          │  │
+│  │   /courses  │  │   + Gemini  │  │   - HoosList ✅         │  │
+│  │   /schedule │  │   + Mistune │  │   - RMP (TODO)          │  │
 │  └─────────────┘  └─────────────┘  └─────────────────────────┘  │
 └─────────────────────────────────────────────────────────────────┘
                                  │
                                  ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │                      Vector Database (ChromaDB)                  │
-│              Embedded course data for semantic search            │
+│     Embedded course data with descriptions & prerequisites       │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -44,6 +45,7 @@ A Retrieval-Augmented Generation (RAG) application that consolidates UVA course 
 ```
 CS4774-Final-Project/
 ├── PROJECT_OUTLINE.md
+├── PROGRESS.md
 ├── README.md
 ├── requirements.txt
 ├── .env.example
@@ -53,14 +55,14 @@ CS4774-Final-Project/
 │   ├── config.py               # Configuration settings
 │   ├── routers/
 │   │   ├── __init__.py
-│   │   ├── chat.py             # Chat endpoint
+│   │   ├── chat.py             # Chat endpoint + markdown rendering
 │   │   ├── courses.py          # Course browsing
 │   │   └── schedule.py         # Schedule builder
 │   ├── services/
 │   │   ├── __init__.py
 │   │   ├── rag_engine.py       # RAG implementation
-│   │   ├── openai_service.py   # OpenAI API wrapper
-│   │   └── sis_service.py      # SIS API integration
+│   │   ├── gemini_service.py   # Google Gemini API wrapper
+│   │   └── sis_service.py      # SIS + HoosList API integration
 │   ├── data/
 │   │   ├── __init__.py
 │   │   ├── vector_store.py     # ChromaDB operations
@@ -71,14 +73,17 @@ CS4774-Final-Project/
 ├── templates/
 │   ├── base.html               # Base template
 │   ├── index.html              # Landing page
-│   ├── chat.html               # Chat interface
+│   ├── chat.html               # Chat interface (async + markdown)
 │   ├── courses.html            # Course browser
 │   └── schedule.html           # Schedule builder
 ├── static/
 │   └── css/
 │       └── styles.css          # Main stylesheet
-└── data/
-    └── courses/                # Cached course data
+├── data/
+│   ├── courses/                # Cached course data
+│   └── chroma/                 # Vector database
+└── tests/
+    └── *.py                    # Test scripts
 ```
 
 ---
@@ -89,25 +94,25 @@ CS4774-Final-Project/
 | Component | Technology | Purpose |
 |-----------|------------|---------|
 | Web Framework | FastAPI | High-performance Python web framework |
-| AI/LLM | OpenAI GPT-4o | Natural language understanding & generation |
+| AI/LLM | Google Gemini 2.0 Flash | Natural language understanding & generation |
 | Vector DB | ChromaDB | Semantic search over course data |
-| Embeddings | OpenAI text-embedding-3-small | Document vectorization |
+| Embeddings | Gemini gemini-embedding-001 | Document vectorization |
 | Templating | Jinja2 | Server-side HTML rendering |
+| Markdown | Mistune | Server-side markdown to HTML |
 
 ### Frontend
 | Component | Technology | Purpose |
 |-----------|------------|---------|
 | Markup | HTML5 | Page structure |
-| Styling | CSS3 | Visual design (no JavaScript) |
-| Forms | HTML Forms | User input handling |
+| Styling | CSS3 | Visual design (dark theme) |
+| Interactivity | Vanilla JavaScript | Async fetch + loading states |
 
 ### Data Sources
 | Source | Status | Data Provided |
 |--------|--------|---------------|
 | SIS API | ✅ Implemented | Course catalog, sections, schedules |
+| HoosList | ✅ Implemented | Course descriptions, prerequisites |
 | RateMyProfessor | 📋 TODO | Instructor reviews, ratings |
-| HoosList (Lou's List) | 📋 TODO | Historical enrollment, grade distributions |
-| CourseForum | 📋 TODO | Student course reviews |
 
 ---
 
@@ -116,8 +121,10 @@ CS4774-Final-Project/
 ### 1. AI Chat Assistant
 - Natural language queries about courses
 - Context-aware responses using RAG
+- **Markdown rendering** - lists, code, tables, bold/italic
 - Conversation memory within session
 - Course recommendations based on interests
+- Loading animation while processing
 
 ### 2. Course Search & Browse
 - Search by subject, number, instructor
@@ -143,33 +150,29 @@ CS4774-Final-Project/
 
 ### Document Processing Pipeline
 1. **Fetch** course data from SIS API
-2. **Transform** into structured documents
-3. **Chunk** documents for embedding
-4. **Embed** using OpenAI embeddings
+2. **Enrich** with descriptions/prerequisites from HoosList
+3. **Transform** into structured documents with readable times
+4. **Embed** using Gemini embeddings
 5. **Store** in ChromaDB vector database
 
 ### Query Pipeline
-1. **Receive** user query
+1. **Receive** user query via async fetch
 2. **Embed** query using same embedding model
-3. **Retrieve** top-k relevant documents
+3. **Retrieve** top-k relevant documents (hybrid search)
 4. **Augment** prompt with retrieved context
-5. **Generate** response using GPT-4o
-6. **Return** formatted response to user
+5. **Generate** response from Gemini
+6. **Render** markdown to HTML
+7. **Return** formatted response
 
-### Prompt Template
-```
-You are an AI academic advisor for UVA students. Use the following course 
-information to answer the student's question. Be helpful, accurate, and 
-concise. If you don't have enough information, say so.
+### Hybrid Search
+- **Exact matching**: First checks for specific course numbers (e.g., "CS 4774")
+- **Semantic search**: Then fills remaining slots with embedding similarity
 
-RELEVANT COURSE INFORMATION:
-{retrieved_documents}
-
-STUDENT QUESTION:
-{user_query}
-
-RESPONSE:
-```
+### Data Formatting
+- **Times**: "09.00.00.000000" → "9am", "14.30.00.000000" → "2:30pm"
+- **Days**: "MoWeFr", "TuTh" (as provided by SIS)
+- **Descriptions**: Full course descriptions from HoosList
+- **Prerequisites**: Parsed from HoosList response
 
 ---
 
@@ -180,20 +183,19 @@ RESPONSE:
 - **Documentation:** https://s23.cs3240.org/sis-api.html
 - **Data:** Course catalog, sections, meeting times, instructors
 
-### OpenAI API
-- **Model:** gpt-4o
-- **Embeddings:** text-embedding-3-small
-- **Usage:** Response generation, semantic search
+### HoosList API
+- **URL:** `https://hooslist.virginia.edu/ClassSchedule/_GetCourseDescription`
+- **Data:** Course descriptions, prerequisites
+
+### Google Gemini API
+- **Model:** gemini-2.0-flash
+- **Embeddings:** gemini-embedding-001
+- **Features:** Fast generation, document/query task types
 
 ### RateMyProfessor (TODO)
 - Web scraping required
 - Professor ratings and reviews
 - Teaching quality metrics
-
-### HoosList (TODO)
-- Successor to Lou's List
-- Grade distributions
-- Historical enrollment data
 
 ---
 
@@ -202,16 +204,17 @@ RESPONSE:
 ### Color Palette
 - **Primary:** #232D4B (UVA Navy)
 - **Secondary:** #E57200 (UVA Orange)
-- **Background:** #F8F9FA
-- **Text:** #2C3E50
-- **Accent:** #3498DB
+- **Background:** #0D1117 (Dark)
+- **Surface:** #1C2128
+- **Text:** #E6EDF3
+- **Muted:** #8B949E
 
 ### Design Principles
-- Clean, minimal interface
+- Clean, minimal dark interface
 - High contrast for readability
-- Mobile-responsive layout
-- Fast server-side rendering
-- No JavaScript dependencies
+- Consistent text colors across elements
+- Loading animations for feedback
+- Markdown-formatted responses
 
 ---
 
@@ -221,27 +224,34 @@ RESPONSE:
 - [x] Project setup
 - [x] Basic FastAPI structure
 - [x] SIS API integration
-- [x] OpenAI integration
+- [x] Gemini API integration
 - [x] Basic chat interface
 
-### Phase 2: RAG Implementation
-- [ ] ChromaDB setup
-- [ ] Document processing pipeline
-- [ ] Query pipeline
-- [ ] Context-aware responses
+### Phase 2: RAG Implementation ✅
+- [x] ChromaDB setup
+- [x] Document processing pipeline
+- [x] Query pipeline with hybrid search
+- [x] Context-aware responses
 
-### Phase 3: Features
-- [ ] Course search/browse
+### Phase 3: Enhancements ✅
+- [x] HoosList integration (descriptions + prerequisites)
+- [x] Markdown rendering (mistune)
+- [x] Readable time formatting
+- [x] Indexing progress indicators
+- [x] Loading animations
+
+### Phase 4: Features (In Progress)
+- [x] Course search/browse
 - [ ] Schedule builder
-- [ ] Conversation memory
+- [x] Conversation memory
 
-### Phase 4: Data Expansion (TODO)
+### Phase 5: Data Expansion (TODO)
 - [ ] RateMyProfessor scraping
-- [ ] HoosList integration
-- [ ] CourseForum data
+- [ ] Grade distribution data
+- [ ] Historical enrollment trends
 
-### Phase 5: Polish
-- [ ] UI refinement
+### Phase 6: Polish
+- [ ] Mobile responsiveness
 - [ ] Error handling
 - [ ] Performance optimization
 - [ ] Documentation
@@ -251,9 +261,9 @@ RESPONSE:
 ## 🔐 Environment Variables
 
 ```env
-OPENAI_API_KEY=sk-...
-SIS_API_BASE_URL=https://sisuva.admin.virginia.edu/...
+GEMINI_API_KEY=your-gemini-api-key
 CHROMA_PERSIST_DIR=./data/chroma
+DATA_DIR=./data
 DEBUG=true
 ```
 
@@ -261,9 +271,12 @@ DEBUG=true
 
 ## 📝 Notes
 
-- All frontend interactions use HTML forms (POST/GET) - no JavaScript
-- FastAPI handles form submissions and redirects appropriately
-- Session state managed server-side
+- Chat uses async fetch with loading animation (simpler than SSE)
+- Markdown rendered server-side via mistune library
+- Hybrid search combines exact course matching with semantic search
+- HoosList provides richer course data (descriptions, prerequisites)
+- Times formatted for readability (9am instead of 09.00.00.000000)
+- Session state managed server-side with in-memory storage
 - RAG provides accurate, grounded responses from real course data
 
 ---
@@ -273,5 +286,5 @@ DEBUG=true
 - [Project SIS API Documentation](https://s23.cs3240.org/sis-api.html)
 - [FastAPI Documentation](https://fastapi.tiangolo.com/)
 - [ChromaDB Documentation](https://docs.trychroma.com/)
-- [OpenAI API Reference](https://platform.openai.com/docs/api-reference)
-
+- [Google Gemini API Reference](https://ai.google.dev/gemini-api/docs)
+- [Mistune Markdown Parser](https://mistune.lepture.com/)
