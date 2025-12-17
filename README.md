@@ -1,6 +1,6 @@
 # HoosAdvisor
 
-**CS 4774 Machine Learning – Final Project**
+**Team 17 - CS 4774 Machine Learning - Final Project**
 
 **Team Members:** Amelia Chen, Tyler Qiu, Thomas Kennedy
 
